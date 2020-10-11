@@ -3,6 +3,7 @@ from tkinter import *
 from tkcalendar import *
 from datetime import datetime
 import compute
+from pandastable import Table
 
 class var():
     dari = ""
@@ -51,6 +52,7 @@ def Grab_sampai():
 button_sampai = Button(window, text="Pilih", command=Grab_sampai)
 button_sampai.grid(row=4, column=3)
 
+f2 = Frame(window)
 
 # Jalankan program
 def Get_param():
@@ -66,7 +68,8 @@ def Get_param():
     print(f"\tDari: {dari}")
     print(f"\tSampai: {sampai}")
     compute.result(lat, long, dari, sampai)
-    
+    pt = Table(f2, dataframe=compute.var.df, showtoolbar=True, showstatusbar=True)
+    pt.show()
 
 button_hitung = Button(window, text="Hitung", command=Get_param)
 button_hitung.grid(row=5, column=0)
