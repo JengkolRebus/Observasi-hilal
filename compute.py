@@ -108,7 +108,7 @@ def result(lat, long, t0, t1):
     df.index+=1
     display(df.head())
     
-    # var.df = df
+    var.df = df
     
     # button = widgets.Button(description="Save to Excel")
     # output = widgets.Output()
