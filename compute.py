@@ -26,7 +26,6 @@ class Find():
     
     def conjunction(self):
         result = []
-        print(type(self.t0[0]))
         t0 = ts.utc(self.t0[0], self.t0[1], self.t0[2])
         t1 = ts.utc(self.t1[0], self.t1[1], self.t1[2])
         f = almanac.oppositions_conjunctions(e, e['moon'])
