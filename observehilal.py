@@ -4,6 +4,7 @@ from tkcalendar import *
 from datetime import datetime
 import compute
 from pandastable import Table
+import pandas as pd
 
 class var():
     dari = ""
@@ -68,8 +69,37 @@ def Get_param():
     print(f"\tDari: {dari}")
     print(f"\tSampai: {sampai}")
     compute.result(lat, long, dari, sampai)
-    pt = Table(f2, dataframe=compute.var.df, showtoolbar=True, showstatusbar=True)
-    pt.show()
+    openNewWindow()
+
+def openNewWindow(): 
+      
+    # Toplevel object which will  
+    # be treated as a new window 
+    newWindow = Toplevel(window) 
+  
+    # sets the title of the 
+    # Toplevel widget 
+    newWindow.title("New Window")
+  
+    class TabelHilal(Frame):
+        """Basic test frame for the table"""
+        def __init__(self, parent=None):
+            self.parent = parent
+            Frame.__init__(self)
+            self.main = newWindow
+            self.main.geometry('600x400+200+100')
+            self.main.title('Hilal')
+            f = Frame(self.main)
+            f.pack(fill=BOTH,expand=1)
+            df = compute.var.df
+            # df = pd.read_csv('test/newfile.csv')
+            self.table = pt = Table(f, dataframe=df,
+                                    showtoolbar=True, showstatusbar=True)
+            pt.show()
+            return
+    TabelHilal()
+
+
 
 button_hitung = Button(window, text="Hitung", command=Get_param)
 button_hitung.grid(row=5, column=0)
