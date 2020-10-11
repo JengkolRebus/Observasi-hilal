@@ -26,8 +26,9 @@ class Find():
     
     def conjunction(self):
         result = []
-        t0 = ts.utc(self.t0)
-        t1 = ts.utc(self.t1)
+        print(type(self.t0[0]))
+        t0 = ts.utc(self.t0[0], self.t0[1], self.t0[2])
+        t1 = ts.utc(self.t1[0], self.t1[1], self.t1[2])
         f = almanac.oppositions_conjunctions(e, e['moon'])
         t, y = almanac.find_discrete(t0, t1, f)
         for ti, yi in zip(t, y):
@@ -105,9 +106,9 @@ def result(lat, long, t0, t1):
                                      'Elongasi', 'Usia Bulan', 
                                      'Imkan Rukyat'])
     df.index+=1
-    # display(df)
+    display(df.head())
     
-    var.df = df
+    # var.df = df
     
     # button = widgets.Button(description="Save to Excel")
     # output = widgets.Output()
@@ -135,4 +136,4 @@ def result(lat, long, t0, t1):
 # lat = widgets.Text(value='7.83305556 S', description='Latitude:')
 # long = widgets.Text(value='110.38305556 E', description='Longitude:')
 
-interactive(result, lat=lat, long=long, t0=dari, t1=sampai)
+# interactive(result, lat=lat, long=long, t0=dari, t1=sampai)
