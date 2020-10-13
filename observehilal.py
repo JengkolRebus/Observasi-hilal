@@ -1,32 +1,36 @@
-import tkinter as tk
-from tkinter import *
-from tkcalendar import *
 from datetime import datetime
-import compute
-from pandastable import Table
+from tkinter import *
+
 import pandas as pd
+from pandastable import Table
+from tkcalendar import *
+
+import compute
+
 
 class var():
     dari = ""
     sampai = ""
     obs = ['7.83305556 S', '110.38305556 E']
 
-window = tk.Tk()
+window = Tk()
+window.state('zoomed')
+
 
 # Input Latitude
-val_lat = tk.StringVar(value=var.obs[0])
-label_lat = tk.Label(text="Latitude").grid(row=0, column=0)
-in_lat = tk.Entry(textvariable=val_lat, width=20, justify=RIGHT)
+val_lat = StringVar(value=var.obs[0])
+label_lat = Label(text="Latitude").grid(row=0, column=0)
+in_lat = Entry(textvariable=val_lat, width=20, justify=RIGHT)
 in_lat.grid(row=0, column=1)
 
 # Input Longitude
-val_long = tk.StringVar(value=var.obs[1])
-label_long = tk.Label(text="Longitude").grid(row=1, column=0)
-in_long = tk.Entry(textvariable=val_long, width=20, justify=RIGHT)
+val_long = StringVar(value=var.obs[1])
+label_long = Label(text="Longitude").grid(row=1, column=0)
+in_long = Entry(textvariable=val_long, width=20, justify=RIGHT)
 in_long.grid(row=1, column=1)
 
 # Datepicker dari
-label_dari = tk.Label(text='Dari').grid(row=3, column=0)
+label_dari = Label(text='Dari').grid(row=3, column=0)
 cal_dari = Calendar(window, selectmode="day",
                     date_pattern='y/mm/d',
                     year=datetime.today().year,
@@ -40,7 +44,7 @@ button_dari = Button(window, text="Pilih", command=Grab_dari)
 button_dari.grid(row=4, column=1)
 
 # Datepicker Sampai
-label_sampai = tk.Label(text='Sampai').grid(row=3, column=2)
+label_sampai = Label(text='Sampai').grid(row=3, column=2)
 cal_sampai = Calendar(window, selectmode="day",
                     date_pattern='y/mm/d',
                     year=datetime.today().year,
