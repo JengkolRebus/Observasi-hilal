@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime as dt
 from tkinter import *
 
 import pandas as pd
@@ -14,48 +14,42 @@ class var():
     obs = ['7.83305556 S', '110.38305556 E']
 
 window = Tk()
-window.state('zoomed')
+# window.state('zoomed')
 
+# Frame 1 berisi parameter
+f1 = Frame(window, bg='red')
+f1.pack(anchor=NW, fill=BOTH, expand=0)
 
 # Input Latitude
 val_lat = StringVar(value=var.obs[0])
-label_lat = Label(text="Latitude").grid(row=0, column=0)
-in_lat = Entry(textvariable=val_lat, width=20, justify=RIGHT)
-in_lat.grid(row=0, column=1)
+label_lat = Label(f1, text="Latitude", width=10, anchor="w", bg='yellow')
+label_lat.grid(sticky=W, row=0, column=0)
+in_lat = Entry(f1, textvariable=val_lat, width=12, justify=RIGHT).grid(sticky = W, row=0, column=1)
 
 # Input Longitude
 val_long = StringVar(value=var.obs[1])
-label_long = Label(text="Longitude").grid(row=1, column=0)
-in_long = Entry(textvariable=val_long, width=20, justify=RIGHT)
-in_long.grid(row=1, column=1)
+label_long = Label(f1, text="Longitude", width=10, anchor="w", bg='yellow').grid(sticky=W, row=1, column=0)
+in_long = Entry(f1, textvariable=val_long, width=12, justify=RIGHT).grid(sticky = W, row=1, column=1)
 
 # Datepicker dari
-label_dari = Label(text='Dari').grid(row=3, column=0)
-cal_dari = Calendar(window, selectmode="day",
-                    date_pattern='y/mm/d',
-                    year=datetime.today().year,
-                    month=datetime.today().month,
-                    day=datetime.today().day)
-cal_dari.grid(row=3, column=1)
+label_dari = Label(f1, text='Dari', width=10, anchor="w", bg='yellow').grid(sticky = W, row=2, column=0)
+cal_dari = DateEntry(f1, width=9)
+cal_dari.grid(sticky = W, row=2, column=1)
 def Grab_dari():
     var.dari = cal_dari.get_date()
 
-button_dari = Button(window, text="Pilih", command=Grab_dari)
-button_dari.grid(row=4, column=1)
+button_dari = Button(f1, text="Pilih", command=Grab_dari)
+button_dari.grid(sticky = E, row=3, column=1)
 
 # Datepicker Sampai
-label_sampai = Label(text='Sampai').grid(row=3, column=2)
-cal_sampai = Calendar(window, selectmode="day",
-                    date_pattern='y/mm/d',
-                    year=datetime.today().year,
-                    month=datetime.today().month+1,
-                    day=datetime.today().day)
-cal_sampai.grid(row=3, column=3)
+label_sampai = Label(f1, text='Sampai', width=10, anchor="w", bg='yellow').grid(sticky = W, row=4, column=0)
+cal_sampai = DateEntry(f1, width=9, month=dt.today().month +1)
+cal_sampai.grid(sticky = W, row=4, column=1)
 def Grab_sampai():
     var.sampai = cal_sampai.get_date()
 
-button_sampai = Button(window, text="Pilih", command=Grab_sampai)
-button_sampai.grid(row=4, column=3)
+button_sampai = Button(f1, text="Pilih", command=Grab_sampai)
+button_sampai.grid(sticky = E, row=5, column=1)
 
 f2 = Frame(window)
 
@@ -63,10 +57,8 @@ f2 = Frame(window)
 def Get_param():
     lat = val_lat.get()
     long = val_long.get()
-    dari = var.dari.split('/')
-    sampai = var.sampai.split('/')
-    dari = [int(i) for i in dari]
-    sampai = [int(i) for i in sampai]
+    dari = var.dari
+    sampai = var.sampai
     print("Parameter:")
     print(f"\tLatitude: {lat}")
     print(f"\tLongitude: {long}")
@@ -94,7 +86,7 @@ def openNewWindow():
             self.main.geometry('600x400+200+100')
             self.main.title('Hilal')
             f = Frame(self.main)
-            f.pack(fill=BOTH,expand=0)
+            f.pack(fill=BOTH,expand=1)
             df = compute.var.df
             # df = pd.read_csv('test/newfile.csv')
             self.table = pt = Table(f, dataframe=df,
@@ -109,7 +101,7 @@ def openNewWindow():
             return
     TabelHilal()
 
-button_hitung = Button(window, text="Hitung", command=Get_param)
-button_hitung.grid(row=5, column=0)
+button_hitung = Button(f1, text="Hitung", command=Get_param)
+button_hitung.grid(sticky = W, row=6, column=0)
 
 window.mainloop()
