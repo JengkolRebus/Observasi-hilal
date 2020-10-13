@@ -90,16 +90,20 @@ def openNewWindow():
             self.main.geometry('600x400+200+100')
             self.main.title('Hilal')
             f = Frame(self.main)
-            f.pack(fill=BOTH,expand=1)
+            f.pack(fill=BOTH,expand=0)
             df = compute.var.df
             # df = pd.read_csv('test/newfile.csv')
             self.table = pt = Table(f, dataframe=df,
-                                    showtoolbar=True, showstatusbar=True)
+                                    showtoolbar=False, showstatusbar=False)
             pt.show()
+
+            f2 = Frame(self.main)
+            f2.pack(side=LEFT)
+            save_button = Button(f2, text='Simpan')
+            save_button.pack(side=LEFT)
+
             return
     TabelHilal()
-
-
 
 button_hitung = Button(window, text="Hitung", command=Get_param)
 button_hitung.grid(row=5, column=0)
