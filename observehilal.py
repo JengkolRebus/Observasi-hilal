@@ -84,7 +84,9 @@ def openNewWindow():
 
             
             def Save_file():
-                compute.var.df.to_excel("C:/Users/Khair/Documents/output.xlsx")
+                filetype = (("Excel Document", "*.xlsx"),)
+                f = filedialog.asksaveasfilename(defaultextension='.xlsx', filetypes=filetype)
+                compute.var.df.to_excel(f)
                 print("File Saved")
             
             f2 = Frame(self.main)
