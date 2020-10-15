@@ -14,7 +14,7 @@ class var():
     obs = ['7.83305556 S', '110.38305556 E']
 
 window = Tk()
-# window.state('zoomed')
+window.state('zoomed')
 
 # Frame 1 berisi parameter
 f1 = Frame(window, bg='red')
@@ -51,7 +51,15 @@ def Grab_sampai():
 button_sampai = Button(f1, text="Pilih", command=Grab_sampai)
 button_sampai.grid(sticky = E, row=5, column=1)
 
-f2 = Frame(window)
+f2 = Frame(window, bg='blue')
+f2.pack(fill=BOTH, expand=1)
+data = compute.var.df
+print(data)
+table=pt=Table(f2, dataframe=compute.var.df)
+pt.show()
+
+save_button = Button(f2, text='Simpan')
+save_button.pack()
 
 # Jalankan program
 def Get_param():
