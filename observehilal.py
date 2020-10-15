@@ -15,7 +15,7 @@ class var():
     obs = ['7.83305556 S', '110.38305556 E']
 
 window = Tk()
-# window.state('zoomed')
+window.state('zoomed')
 
 # Frame 1 berisi parameter
 f1 = Frame(window, bg='red')
@@ -42,6 +42,9 @@ label_sampai = Label(f1, text='Sampai', width=10, anchor="w", bg='yellow').grid(
 cal_sampai = DateEntry(f1, width=9, month=dt.today().month +1)
 cal_sampai.grid(sticky = W, row=4, column=1)
 
+f2 = Frame(window)
+f2.pack(fill=BOTH, expand=1)
+
 
 # Jalankan program
 def Get_param():
@@ -55,7 +58,9 @@ def Get_param():
     print(f"\tDari: {dari}")
     print(f"\tSampai: {sampai}")
     compute.result(lat, long, dari, sampai)
-    openNewWindow()
+    df = compute.var.df
+    out_tabel = Table(f2, dataframe=df)
+    out_tabel.show()
 
 def openNewWindow():
     # Toplevel object which will  
@@ -99,5 +104,9 @@ def openNewWindow():
 
 button_hitung = Button(f1, text="Hitung", command=Get_param)
 button_hitung.grid(sticky = W, row=6, column=0)
+
+
+save_button = Button(f2, text='Simpan')
+save_button.grid(row=2)
 
 window.mainloop()
