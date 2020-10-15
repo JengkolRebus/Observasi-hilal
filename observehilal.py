@@ -66,14 +66,7 @@ def Get_param():
 def Save_file():
     filetype = (("Excel Document", "*.xlsx"),)
     f = filedialog.asksaveasfilename(defaultextension='.xlsx', filetypes=filetype)
-    format_data = pd.ExcelWriter(f, engine='xlsxwriter')
-    compute.var.df.to_excel(format_data)
-
-    workbook  = format_data.book
-    worksheet = format_data.sheets['Sheet1']
-    format1 = workbook.add_format({'num_format': 'hh:mm:ss'})
-    worksheet.set_column('I:I', None, format1)
-    format_data.save()
+    compute.var.df.to_excel(f)
     print("File Saved")
 
 button_hitung = Button(f1, text="Hitung", command=Get_param)

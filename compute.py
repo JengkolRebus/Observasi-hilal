@@ -96,6 +96,8 @@ def result(lat, long, t0, t1):
     moon_age = [t1-t0 for (t0, t1) in zip(conj, sunset)]
     imkan_rukyat = [imkanRukyat(al, el, age) for al, el, age in zip(moon_alt, elong, moon_age)]
 
+    moon_age[:] = [str(i) for i in moon_age]
+
     
     # Menampilkan hasil dalam bentuk tabel dataframe
     tabel = list(zip(conj, sunset,
