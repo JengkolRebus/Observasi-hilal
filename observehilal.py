@@ -1,5 +1,6 @@
 from datetime import datetime as dt
 from tkinter import *
+from tkinter import filedialog
 
 import pandas as pd
 from pandastable import Table
@@ -81,9 +82,14 @@ def openNewWindow():
                                     showtoolbar=False, showstatusbar=False)
             pt.show()
 
+            
+            def Save_file():
+                compute.var.df.to_excel("C:/Users/Khair/Documents/output.xlsx")
+                print("File Saved")
+            
             f2 = Frame(self.main)
             f2.pack(side=LEFT)
-            save_button = Button(f2, text='Simpan')
+            save_button = Button(f2, text='Simpan', command=Save_file)
             save_button.pack(side=LEFT)
 
             return
