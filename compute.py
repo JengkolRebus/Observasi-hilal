@@ -108,31 +108,3 @@ def result(lat, long, t0, t1):
     display(df.head())
     
     var.df = df
-    
-    # button = widgets.Button(description="Save to Excel")
-    # output = widgets.Output()
-    # display(button, output)
-    # def on_button_clicked(b):
-    #     var.df.to_excel("output.xlsx")
-    #     with output:
-    #         print("Button clicked.")
-
-    # button.on_click(on_button_clicked)
-
-# hari_ini = datetime.now().date()
-# days_in_month = calendar.monthrange(hari_ini.year, hari_ini.month)[1]
-# bulan_depan = hari_ini + timedelta(days_in_month)
-
-# dari = widgets.DatePicker(value=hari_ini,
-#     description='Dari:',
-#     disabled=False
-# )
-# sampai = widgets.DatePicker(value=bulan_depan,
-#     description='Sampai:',
-#     disabled=False
-# )
-
-# lat = widgets.Text(value='7.83305556 S', description='Latitude:')
-# long = widgets.Text(value='110.38305556 E', description='Longitude:')
-
-# interactive(result, lat=lat, long=long, t0=dari, t1=sampai)
