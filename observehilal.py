@@ -14,7 +14,7 @@ class var():
     obs = ['7.83305556 S', '110.38305556 E']
 
 window = Tk()
-window.state('zoomed')
+# window.state('zoomed')
 
 # Frame 1 berisi parameter
 f1 = Frame(window, bg='red')
@@ -35,38 +35,19 @@ in_long = Entry(f1, textvariable=val_long, width=12, justify=RIGHT).grid(sticky 
 label_dari = Label(f1, text='Dari', width=10, anchor="w", bg='yellow').grid(sticky = W, row=2, column=0)
 cal_dari = DateEntry(f1, width=9)
 cal_dari.grid(sticky = W, row=2, column=1)
-def Grab_dari():
-    var.dari = cal_dari.get_date()
-
-button_dari = Button(f1, text="Pilih", command=Grab_dari)
-button_dari.grid(sticky = E, row=3, column=1)
 
 # Datepicker Sampai
 label_sampai = Label(f1, text='Sampai', width=10, anchor="w", bg='yellow').grid(sticky = W, row=4, column=0)
 cal_sampai = DateEntry(f1, width=9, month=dt.today().month +1)
 cal_sampai.grid(sticky = W, row=4, column=1)
-def Grab_sampai():
-    var.sampai = cal_sampai.get_date()
 
-button_sampai = Button(f1, text="Pilih", command=Grab_sampai)
-button_sampai.grid(sticky = E, row=5, column=1)
-
-f2 = Frame(window, bg='blue')
-f2.pack(fill=BOTH, expand=1)
-data = compute.var.df
-print(data)
-table=pt=Table(f2, dataframe=compute.var.df)
-pt.show()
-
-save_button = Button(f2, text='Simpan')
-save_button.pack()
 
 # Jalankan program
 def Get_param():
     lat = val_lat.get()
     long = val_long.get()
-    dari = var.dari
-    sampai = var.sampai
+    dari = cal_dari.get_date()
+    sampai = cal_sampai.get_date()
     print("Parameter:")
     print(f"\tLatitude: {lat}")
     print(f"\tLongitude: {long}")
@@ -75,8 +56,7 @@ def Get_param():
     compute.result(lat, long, dari, sampai)
     openNewWindow()
 
-def openNewWindow(): 
-      
+def openNewWindow():
     # Toplevel object which will  
     # be treated as a new window 
     newWindow = Toplevel(window) 
