@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import filedialog
 
 import pandas as pd
-from pandastable import Table
+from pandastable import Table, TableModel
 from tkcalendar import *
 
 import compute
@@ -15,7 +15,7 @@ class var():
     obs = ['7.83305556 S', '110.38305556 E']
 
 window = Tk()
-# window.state('zoomed')
+window.state('zoomed')
 
 # Frame 1 berisi parameter
 f1 = Frame(window, bg='red')
@@ -42,6 +42,10 @@ label_sampai = Label(f1, text='Sampai', width=10, anchor="w", bg='yellow').grid(
 cal_sampai = DateEntry(f1, width=9, month=dt.today().month +1)
 cal_sampai.grid(sticky = W, row=4, column=1)
 
+f2 = Frame(window)
+f2.pack(fill=BOTH, expand=1)
+pt = Table(f2, model=TableModel(dataframe=compute.var.df))
+pt.show()
 
 # Jalankan program
 def Get_param():
@@ -55,49 +59,27 @@ def Get_param():
     print(f"\tDari: {dari}")
     print(f"\tSampai: {sampai}")
     compute.result(lat, long, dari, sampai)
-    openNewWindow()
+    pt = Table(f2, model=TableModel(dataframe=compute.var.df))
+    pt.show()
+    pt.redraw()
 
-def openNewWindow():
-    # Toplevel object which will  
-    # be treated as a new window 
-    newWindow = Toplevel(window) 
-  
-    # sets the title of the 
-    # Toplevel widget 
-    newWindow.title("New Window")
-  
-    class TabelHilal(Frame):
-        """Basic test frame for the table"""
-        def __init__(self, parent=None):
-            self.parent = parent
-            Frame.__init__(self)
-            self.main = newWindow
-            self.main.geometry('600x400+200+100')
-            self.main.title('Hilal')
-            f = Frame(self.main)
-            f.pack(fill=BOTH,expand=1)
-            df = compute.var.df
-            # df = pd.read_csv('test/newfile.csv')
-            self.table = pt = Table(f, dataframe=df,
-                                    showtoolbar=False, showstatusbar=False)
-            pt.show()
+def Save_file():
+    filetype = (("Excel Document", "*.xlsx"),)
+    f = filedialog.asksaveasfilename(defaultextension='.xlsx', filetypes=filetype)
+    format_data = pd.ExcelWriter(f, engine='xlsxwriter')
+    compute.var.df.to_excel(format_data)
 
-            
-            def Save_file():
-                filetype = (("Excel Document", "*.xlsx"),)
-                f = filedialog.asksaveasfilename(defaultextension='.xlsx', filetypes=filetype)
-                compute.var.df.to_excel(f)
-                print("File Saved")
-            
-            f2 = Frame(self.main)
-            f2.pack(side=LEFT)
-            save_button = Button(f2, text='Simpan', command=Save_file)
-            save_button.pack(side=LEFT)
-
-            return
-    TabelHilal()
+    workbook  = format_data.book
+    worksheet = format_data.sheets['Sheet1']
+    format1 = workbook.add_format({'num_format': 'hh:mm:ss'})
+    worksheet.set_column('I:I', None, format1)
+    format_data.save()
+    print("File Saved")
 
 button_hitung = Button(f1, text="Hitung", command=Get_param)
 button_hitung.grid(sticky = W, row=6, column=0)
+
+save_button = Button(f2, text='Simpan', command=Save_file)
+save_button.grid(row=2)
 
 window.mainloop()

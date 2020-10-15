@@ -9,7 +9,11 @@ import pandas as pd
 import calendar
 
 class var:
-    df = []
+    df = pd.DataFrame(list(zip(' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ')), columns=['Waktu Konjungsi (UTC+07)', 'Waktu Hilal (UTC+07)', 
+                                      'Altitude Bulan', 'Azimuth Bulan', 
+                                      'Altitude Matahari', 'Azimuth Matahari', 
+                                     'Elongasi', 'Usia Bulan', 
+                                     'Imkan Rukyat'])
 
 jkt = timezone('Asia/Jakarta')
 ts = load.timescale()
@@ -91,6 +95,7 @@ def result(lat, long, t0, t1):
     
     moon_age = [t1-t0 for (t0, t1) in zip(conj, sunset)]
     imkan_rukyat = [imkanRukyat(al, el, age) for al, el, age in zip(moon_alt, elong, moon_age)]
+
     
     # Menampilkan hasil dalam bentuk tabel dataframe
     tabel = list(zip(conj, sunset,
@@ -104,35 +109,7 @@ def result(lat, long, t0, t1):
                                       'Altitude Matahari', 'Azimuth Matahari', 
                                      'Elongasi', 'Usia Bulan', 
                                      'Imkan Rukyat'])
-    df.index+=1
+    # df.index+=1
     display(df.head())
     
     var.df = df
-    
-    # button = widgets.Button(description="Save to Excel")
-    # output = widgets.Output()
-    # display(button, output)
-    # def on_button_clicked(b):
-    #     var.df.to_excel("output.xlsx")
-    #     with output:
-    #         print("Button clicked.")
-
-    # button.on_click(on_button_clicked)
-
-# hari_ini = datetime.now().date()
-# days_in_month = calendar.monthrange(hari_ini.year, hari_ini.month)[1]
-# bulan_depan = hari_ini + timedelta(days_in_month)
-
-# dari = widgets.DatePicker(value=hari_ini,
-#     description='Dari:',
-#     disabled=False
-# )
-# sampai = widgets.DatePicker(value=bulan_depan,
-#     description='Sampai:',
-#     disabled=False
-# )
-
-# lat = widgets.Text(value='7.83305556 S', description='Latitude:')
-# long = widgets.Text(value='110.38305556 E', description='Longitude:')
-
-# interactive(result, lat=lat, long=long, t0=dari, t1=sampai)
