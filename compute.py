@@ -9,13 +9,7 @@ import pandas as pd
 import calendar
 
 class var:
-    tabel = list(zip(' ',' ',' ',' ',' ',' ',' ',' ',' '))
-    
-    df = pd.DataFrame(tabel, columns=['Waktu Konjungsi (UTC+07)', 'Waktu Hilal (UTC+07)', 
-                                      'Altitude Bulan', 'Azimuth Bulan', 
-                                      'Altitude Matahari', 'Azimuth Matahari', 
-                                     'Elongasi', 'Usia Bulan', 
-                                     'Imkan Rukyat'])
+    df = []
 
 jkt = timezone('Asia/Jakarta')
 ts = load.timescale()
