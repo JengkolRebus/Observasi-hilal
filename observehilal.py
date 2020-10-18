@@ -18,27 +18,27 @@ window = Tk()
 window.state('zoomed')
 
 # Frame 1 berisi parameter
-f1 = Frame(window, bg='red')
+f1 = Frame(window)
 f1.pack(anchor=NW, fill=BOTH, expand=0)
 
 # Input Latitude
 val_lat = StringVar(value=var.obs[0])
-label_lat = Label(f1, text="Latitude", width=10, anchor="w", bg='yellow')
+label_lat = Label(f1, text="Latitude", width=10, anchor="w")
 label_lat.grid(sticky=W, row=0, column=0)
 in_lat = Entry(f1, textvariable=val_lat, width=12, justify=RIGHT).grid(sticky = W, row=0, column=1)
 
 # Input Longitude
 val_long = StringVar(value=var.obs[1])
-label_long = Label(f1, text="Longitude", width=10, anchor="w", bg='yellow').grid(sticky=W, row=1, column=0)
+label_long = Label(f1, text="Longitude", width=10, anchor="w").grid(sticky=W, row=1, column=0)
 in_long = Entry(f1, textvariable=val_long, width=12, justify=RIGHT).grid(sticky = W, row=1, column=1)
 
 # Datepicker dari
-label_dari = Label(f1, text='Dari', width=10, anchor="w", bg='yellow').grid(sticky = W, row=2, column=0)
+label_dari = Label(f1, text='Dari', width=10, anchor="w").grid(sticky = W, row=2, column=0)
 cal_dari = DateEntry(f1, width=9)
 cal_dari.grid(sticky = W, row=2, column=1)
 
 # Datepicker Sampai
-label_sampai = Label(f1, text='Sampai', width=10, anchor="w", bg='yellow').grid(sticky = W, row=4, column=0)
+label_sampai = Label(f1, text='Sampai', width=10, anchor="w").grid(sticky = W, row=4, column=0)
 cal_sampai = DateEntry(f1, width=9, month=dt.today().month +1)
 cal_sampai.grid(sticky = W, row=4, column=1)
 
