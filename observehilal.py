@@ -38,8 +38,16 @@ cal_dari = DateEntry(f1, width=9)
 cal_dari.grid(sticky = W, row=2, column=1)
 
 # Datepicker Sampai
+
+t2 = dt.today().month+1
+print(t2)
+if(t2 > 12):
+    t2=dt.today().month -11
+    print(t2)
+else:
+    pass
 label_sampai = Label(f1, text='Sampai', width=10, anchor="w").grid(sticky = W, row=4, column=0)
-cal_sampai = DateEntry(f1, width=9, month=dt.today().month +1)
+cal_sampai = DateEntry(f1, width=9, month=t2)
 cal_sampai.grid(sticky = W, row=4, column=1)
 
 f2 = Frame(window)
