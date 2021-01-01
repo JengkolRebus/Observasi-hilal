@@ -21,7 +21,7 @@ class var:
                                      'Imkan Rukyat'])
 
 jkt = timezone('Asia/Jakarta')
-ts = load.timescale()
+ts = load.timescale(builtin=True)
 e = load('de421.bsp')
 
 class Find():
