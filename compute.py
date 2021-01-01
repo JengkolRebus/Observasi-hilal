@@ -47,13 +47,29 @@ class Find():
 
         return result
 
-    def cekMoonset(self, t):
-        pass
-        
-    def sunset(self, t):
+    def moonSet(self, t):
         t = t.utc
         t0 = ts.utc(t[0], t[1], t[2], t[3], t[4], t[5])
         t1 = ts.utc(t[0], t[1], t[2]+1, t[3], t[4], t[5])
+        f = almanac.risings_and_settings(e, e['moon'], self.topo)
+        t, y = almanac.find_discrete(t0, t1, f)
+        for ti, yi in zip(t, y):
+            if(yi == 0):
+                return ti
+            else:
+                pass
+
+    def isMoonset(self, t):
+        stat = self.moonSet(t)
+        if (stat == None):
+            return False
+        else:
+            return True
+        
+    def sunset(self, t, case):
+        t = t.utc
+        t0 = ts.utc(t[0], t[1], t[2], t[3], t[4], t[5])
+        t1 = ts.utc(t[0], t[1], t[2] + case, t[3], t[4], t[5])
         f = almanac.sunrise_sunset(e, self.topo)
         t, y = almanac.find_discrete(t0, t1, f)
         for ti, yi in zip(t, y):
@@ -66,18 +82,6 @@ class Find():
         astrometric = self.loc.at(t).observe(e[obj])
         alt, az, d = astrometric.apparent().altaz()
         return alt, az, astrometric
-
-    def moonSet(self, t):
-        t = t.utc
-        t0 = ts.utc(t[0], t[1], t[2], t[3], t[4], t[5])
-        t1 = ts.utc(t[0], t[1], t[2]+1, t[3], t[4], t[5])
-        f = almanac.risings_and_settings(e, e['moon'], self.topo)
-        t, y = almanac.find_discrete(t0, t1, f)
-        for ti, yi in zip(t, y):
-            if(yi == 0):
-                return ti
-            else:
-                pass
 
     def hijri(self, t):
         t = t.utc
@@ -191,14 +195,19 @@ def result(lat, long, t0, t1):
     conj = f.conjunction()
     # hijr = [f.hijri(i) for i in conj]
 
-    sunset = [f.sunset(t) for t in conj]
-    # cek jika bulan lebih dulu terbenam atau tidak pada saat sunset
+    sunset = [f.sunset(t, 1) for t in conj]
+    for index, i in enumerate(sunset):
+        if(f.isMoonset(i) == False):
+            i = f.sunset(i, 2)
+            sunset[index] = i
+        else:
+            pass
+    for i in sunset:
+        print(i.astimezone(jkt))
+    
     moonset = [f.moonSet(t) for t in sunset]
     for i in moonset:
-        if (i != None):
-            print(i.astimezone(jkt))
-        else:
-            print(i)
+        print(i.astimezone(jkt))
     # count = 0
     # for i in moonset:
     #     if (i == None):
@@ -235,10 +244,10 @@ def result(lat, long, t0, t1):
     
     conj[:] = [t.astimezone(jkt).replace(tzinfo=None) for t in conj]
     sunset[:] = [t.astimezone(jkt).replace(tzinfo=None) for t in sunset]
-    # moonset[:] = [t.astimezone(jkt).replace(tzinfo=None) for t in moonset]
+    moonset[:] = [t.astimezone(jkt).replace(tzinfo=None) for t in moonset]
     
     moon_age = [t1-t0 for (t0, t1) in zip(conj, sunset)]
-    # lag = [j-i for (i, j) in zip(sunset, moonset)]
+    lag = [j-i for (i, j) in zip(sunset, moonset)]
     # lag = []
     # for i, j in zip(sunset, moonset):
     #     lagTime = j-i
@@ -249,12 +258,12 @@ def result(lat, long, t0, t1):
     imkan_rukyat = [imkanRukyat(al, el, age) for al, el, age in zip(moon_alt, elong, moon_age)]
 
     moon_age[:] = [str(i) for i in moon_age]
-    # lag[:] = [str(i) for i in lag]
+    lag[:] = [str(i) for i in lag]
     
     conj[:] = [str(i).split('.', 1)[0] for i in conj]
     sunset[:] = [str(i).split('.', 1)[0] for i in sunset]
     moon_age[:] = [i.split('.', 1)[0] for i in moon_age]
-    # lag[:] = [i.split('.', 1)[0] for i in lag]
+    lag[:] = [i.split('.', 1)[0] for i in lag]
 
     moon_alt[:] = [str(i).replace('deg', u'\N{DEGREE SIGN}') for i in moon_alt]
     moon_az[:] = [str(i).replace('deg', u'\N{DEGREE SIGN}') for i in moon_az]
@@ -263,32 +272,32 @@ def result(lat, long, t0, t1):
     elong[:] = [str(i).replace('deg', u'\N{DEGREE SIGN}') for i in elong]
     
     # Menampilkan hasil dalam bentuk tabel dataframe
-    # tabel = list(zip(conj, sunset,
-    #                  moon_alt, moon_az, 
-    #                  sun_alt, sun_az, 
-    #                  elong, moon_age,
-    #                  lag,
-    #                  imkan_rukyat))
-
-
     tabel = list(zip(conj, sunset,
                      moon_alt, moon_az, 
                      sun_alt, sun_az, 
                      elong, moon_age,
+                     lag,
                      imkan_rukyat))
-    
-    # df = pd.DataFrame(tabel, columns=['Waktu Konjungsi (UTC+07)', 'Waktu Sunset (UTC+07)', 
-    #                                   'Altitude Bulan', 'Azimuth Bulan', 
-    #                                   'Altitude Matahari', 'Azimuth Matahari', 
-    #                                  'Elongasi', 'Usia Bulan',
-    #                                  'Lag Time',
-    #                                  'Imkan Rukyat'])
 
+
+    # tabel = list(zip(conj, sunset,
+    #                  moon_alt, moon_az, 
+    #                  sun_alt, sun_az, 
+    #                  elong, moon_age,
+    #                  imkan_rukyat))
+    
     df = pd.DataFrame(tabel, columns=['Waktu Konjungsi (UTC+07)', 'Waktu Sunset (UTC+07)', 
                                       'Altitude Bulan', 'Azimuth Bulan', 
                                       'Altitude Matahari', 'Azimuth Matahari', 
                                      'Elongasi', 'Usia Bulan',
+                                     'Lag Time',
                                      'Imkan Rukyat'])
+
+    # df = pd.DataFrame(tabel, columns=['Waktu Konjungsi (UTC+07)', 'Waktu Sunset (UTC+07)', 
+    #                                   'Altitude Bulan', 'Azimuth Bulan', 
+    #                                   'Altitude Matahari', 'Azimuth Matahari', 
+    #                                  'Elongasi', 'Usia Bulan',
+    #                                  'Imkan Rukyat'])
     # df.index+=1
     display(df.head())
     
