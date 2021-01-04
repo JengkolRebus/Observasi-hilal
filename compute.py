@@ -32,6 +32,9 @@ class Find():
         self.t1 = t1
         self.topo = Topos(self.lat, self.long)
         self.loc = e['earth'] + self.topo
+
+    def nearest_second(self, t):
+        return (t + timedelta(seconds=0.5)).replace(microsecond=0)
     
     def conjunction(self):
         result = []
@@ -46,6 +49,21 @@ class Find():
                 pass
 
         return result
+
+    def newMoon(self):
+        result = []
+        t0 = ts.utc(self.t0)
+        t1 = ts.utc(self.t1)
+        f = almanac.moon_phases(e)
+        t, y = almanac.find_discrete(t0, t1, f)
+        for ti, yi in zip(t, y):
+            if(yi == 0):
+                result.append(ti)
+            else:
+                pass
+
+        return result
+
 
     def moonSet(self, t):
         t = t.utc
@@ -192,7 +210,8 @@ def imkanRukyat(alt, elong, age):
 
 def result(lat, long, t0, t1):
     f = Find(lat, long, t0, t1)
-    conj = f.conjunction()
+    conj = f.newMoon()
+    # conj = f.conjunction()
     # hijr = [f.hijri(i) for i in conj]
 
     sunset = [f.sunset(t, 1) for t in conj]
@@ -202,26 +221,12 @@ def result(lat, long, t0, t1):
             sunset[index] = i
         else:
             pass
-    for i in sunset:
-        print(i.astimezone(jkt))
+    # for i in sunset:
+    #     print(i.astimezone(jkt))
     
     moonset = [f.moonSet(t) for t in sunset]
-    for i in moonset:
-        print(i.astimezone(jkt))
-    # count = 0
     # for i in moonset:
-    #     if (i == None):
-    #         count = count+1
-    #         print(i)
-    #     else:
-    #         pass
-    # print(count)
-    
-    # moonset_alt = []
-    # for t in moonset:
-    #     alt, az, astro = f.objPos(t, 'moon')
-    #     moonset_alt.append(alt)
-    #     print(alt)
+    #     print(i.astimezone(jkt))
     
     moon_alt = []
     moon_az = []
@@ -248,13 +253,7 @@ def result(lat, long, t0, t1):
     
     moon_age = [t1-t0 for (t0, t1) in zip(conj, sunset)]
     lag = [j-i for (i, j) in zip(sunset, moonset)]
-    # lag = []
-    # for i, j in zip(sunset, moonset):
-    #     lagTime = j-i
-    #     lag.append(lagTime)
-
-    # for i in lag:
-    #     print(i)
+    
     imkan_rukyat = [imkanRukyat(al, el, age) for al, el, age in zip(moon_alt, elong, moon_age)]
 
     moon_age[:] = [str(i) for i in moon_age]
@@ -276,7 +275,7 @@ def result(lat, long, t0, t1):
                      moon_alt, moon_az, 
                      sun_alt, sun_az, 
                      elong, moon_age,
-                     lag,
+                     moonset, lag,
                      imkan_rukyat))
 
 
@@ -290,7 +289,7 @@ def result(lat, long, t0, t1):
                                       'Altitude Bulan', 'Azimuth Bulan', 
                                       'Altitude Matahari', 'Azimuth Matahari', 
                                      'Elongasi', 'Usia Bulan',
-                                     'Lag Time',
+                                     'Moonset', 'Lag Time',
                                      'Imkan Rukyat'])
 
     # df = pd.DataFrame(tabel, columns=['Waktu Konjungsi (UTC+07)', 'Waktu Sunset (UTC+07)', 
