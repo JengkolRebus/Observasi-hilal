@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QDate, QTime, QDateTime, QAbstractTableModel, Qt
 import random
 import compute
 from datetime import datetime
@@ -18,30 +19,46 @@ import pandas as pd
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(320, 600)
+        MainWindow.resize(970, 600)
         MainWindow.setMinimumSize(QtCore.QSize(0, 0))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-
         self.listWidget = QtWidgets.QListWidget(self.centralwidget)
-        self.listWidget.setGeometry(QtCore.QRect(10, 50, 160, 500))
+        self.listWidget.setGeometry(QtCore.QRect(10, 150, 130, 400))
         self.listWidget.setObjectName("listWidget")
-        self.listWidget.itemClicked.connect(self.selectedList)
-
         self.testButton = QtWidgets.QPushButton(self.centralwidget)
         self.testButton.setGeometry(QtCore.QRect(235, 20, 75, 25))
         self.testButton.setObjectName("testButton")
-        self.testButton.clicked.connect(self.test)
-
         self.label1 = QtWidgets.QLabel(self.centralwidget)
         self.label1.setGeometry(QtCore.QRect(10, 20, 210, 25))
         self.label1.setFrameShape(QtWidgets.QFrame.WinPanel)
         self.label1.setText("")
         self.label1.setObjectName("label1")
-
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(10, 130, 80, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label.setFont(font)
+        self.label.setObjectName("label")
+        self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox.setGeometry(QtCore.QRect(150, 130, 810, 420))
+        self.groupBox.setObjectName("groupBox")
+        self.frame_grafik = QtWidgets.QFrame(self.groupBox)
+        self.frame_grafik.setGeometry(QtCore.QRect(299, 20, 500, 390))
+        self.frame_grafik.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_grafik.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_grafik.setObjectName("frame_grafik")
+        self.tableView = QtWidgets.QTableView(self.groupBox)
+        self.tableView.setGeometry(QtCore.QRect(10, 120, 280, 290))
+        self.tableView.setObjectName("tableView")
+        self.groupBox.raise_()
+        self.listWidget.raise_()
+        self.testButton.raise_()
+        self.label1.raise_()
+        self.label.raise_()
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 320, 20))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 970, 20))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -51,10 +68,19 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        self.listWidget.itemClicked.connect(self.selectedList)
+        self.testButton.clicked.connect(self.test)
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.testButton.setText(_translate("MainWindow", "Test"))
+        self.label.setText(_translate("MainWindow", "Konjungsi"))
+        self.groupBox.setTitle(_translate("MainWindow", "GroupBox"))
+
+    
+        # self.listWidget.itemClicked.connect(self.selectedList)
+        # self.testButton.clicked.connect(self.test)
 
     def test(self):
         lat = '7.83305556 S'
@@ -67,9 +93,36 @@ class Ui_MainWindow(object):
         sunset = [str(i) for i in sunset]
         self.listWidget.addItems(sunset)
 
-    def selectedList(self):
+    def selectedList(self, item):
         row = self.listWidget.currentRow()
         print(row)
+        
+        model = pandasModel(compute.var.df.loc[[row]])
+        self.tableView.setModel(model)
+        self.tableView.resizeColumnsToContents()
+
+class pandasModel(QAbstractTableModel):
+    def __init__(self, data):
+        QAbstractTableModel.__init__(self)
+        self._data = data
+
+    def rowCount(self, parent=None):
+        return self._data.shape[0]
+
+    def columnCount(self, parnet=None):
+        return self._data.shape[1]
+        # return 1
+
+    def data(self, index, role=Qt.DisplayRole):
+        if index.isValid():
+            if role == Qt.DisplayRole:
+                return str(self._data.iloc[index.row(), index.column()])
+        return None
+
+    def headerData(self, col, orientation, role):
+        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+            return self._data.columns[col]
+        return None
 
 if __name__ == "__main__":
     import sys
