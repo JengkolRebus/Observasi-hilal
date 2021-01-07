@@ -24,9 +24,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>50</y>
-      <width>300</width>
-      <height>500</height>
+      <y>150</y>
+      <width>130</width>
+      <height>400</height>
      </rect>
     </property>
    </widget>
@@ -59,6 +59,68 @@
      <string/>
     </property>
    </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>130</y>
+      <width>80</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Konjungsi</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>130</y>
+      <width>810</width>
+      <height>420</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>GroupBox</string>
+    </property>
+    <widget class="QFrame" name="frame_grafik">
+     <property name="geometry">
+      <rect>
+       <x>299</x>
+       <y>20</y>
+       <width>500</width>
+       <height>390</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
+    <widget class="QTableView" name="tableView">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>120</y>
+       <width>280</width>
+       <height>290</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <zorder>groupBox</zorder>
+   <zorder>listWidget</zorder>
+   <zorder>testButton</zorder>
+   <zorder>label1</zorder>
+   <zorder>label</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
