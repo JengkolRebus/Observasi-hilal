@@ -13,6 +13,8 @@ import pandas as pd
 import calendar
 import gui
 
+
+
 class var:
     df = pd.DataFrame(list(zip(' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ')), columns=['Waktu Konjungsi (UTC+07)', 'Waktu Hilal (UTC+07)', 
                                       'Altitude Bulan', 'Azimuth Bulan', 
@@ -30,7 +32,7 @@ class Find():
         self.long = long
         self.t0 = t0
         self.t1 = t1
-        self.topo = Topos(self.lat, self.long)
+        self.topo = Topos(self.lat, self.long, elevation_m=100.0)
         self.loc = e['earth'] + self.topo
 
     def nearest_second(self, t):
@@ -259,10 +261,10 @@ def result(lat, long, t0, t1):
     moon_age[:] = [str(i) for i in moon_age]
     lag[:] = [str(i) for i in lag]
     
-    conj[:] = [str(i).split('.', 1)[0] for i in conj]
-    sunset[:] = [str(i).split('.', 1)[0] for i in sunset]
-    moon_age[:] = [i.split('.', 1)[0] for i in moon_age]
-    lag[:] = [i.split('.', 1)[0] for i in lag]
+    # conj[:] = [str(i).split('.', 1)[0] for i in conj]
+    # sunset[:] = [str(i).split('.', 1)[0] for i in sunset]
+    # moon_age[:] = [i.split('.', 1)[0] for i in moon_age]
+    # lag[:] = [i.split('.', 1)[0] for i in lag]
 
     moon_alt[:] = [str(i).replace('deg', u'\N{DEGREE SIGN}') for i in moon_alt]
     moon_az[:] = [str(i).replace('deg', u'\N{DEGREE SIGN}') for i in moon_az]
