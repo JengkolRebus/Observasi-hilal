@@ -248,6 +248,13 @@ def result(lat, long, t0, t1):
         sun_astrometric.append(astro)
     
     elong = [moon.separation_from(sun) for moon, sun in zip(moon_astrometric, sun_astrometric)]
+
+    def nearest_second(t):
+        return (t + timedelta(seconds=0.5)).replace(microsecond=0)
+
+    def nearest_second_timedelta(t):
+        return timedelta(seconds=round(t.total_seconds()))
+
     
     conj[:] = [t.astimezone(jkt).replace(tzinfo=None) for t in conj]
     sunset[:] = [t.astimezone(jkt).replace(tzinfo=None) for t in sunset]
@@ -257,6 +264,17 @@ def result(lat, long, t0, t1):
     lag = [j-i for (i, j) in zip(sunset, moonset)]
     
     imkan_rukyat = [imkanRukyat(al, el, age) for al, el, age in zip(moon_alt, elong, moon_age)]
+    
+
+    # lag[:] = [str(i) for i in lag]
+    
+    conj[:] = [nearest_second(t) for t in conj]
+    sunset[:] = [nearest_second(t) for t in sunset]
+    moonset[:] = [nearest_second(t) for t in moonset]
+
+    
+    moon_age[:] = [nearest_second_timedelta(t) for t in moon_age]
+    lag[:] = [nearest_second_timedelta(t) for t in lag]
 
     moon_age[:] = [str(i) for i in moon_age]
     lag[:] = [str(i) for i in lag]
