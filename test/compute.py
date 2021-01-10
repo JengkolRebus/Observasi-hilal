@@ -11,6 +11,7 @@ from ipywidgets import widgets, interact, interactive
 from IPython.display import display, HTML
 import pandas as pd
 import calendar
+import numpy as np
 # import gui
 
 
@@ -21,6 +22,9 @@ class var:
                                       'Altitude Matahari', 'Azimuth Matahari', 
                                      'Elongasi', 'Usia Bulan', 
                                      'Imkan Rukyat'])
+
+    MOON_DIAMETER = 3474.2 #1737.1 # km
+    SUN_DIAMETER = 1392700 #696340 # km
 
 jkt = timezone('Asia/Jakarta')
 ts = load.timescale(builtin=True)
@@ -101,7 +105,12 @@ class Find():
     def objPos(self, t, obj):
         astrometric = self.loc.at(t).observe(e[obj])
         alt, az, d = astrometric.apparent().altaz()
-        return alt, az, astrometric
+        if (obj == 'moon'):
+          appDiam = (2*np.arcsin(var.MOON_DIAMETER/(2*d.km)))*(180/np.pi)
+        else:
+          appDiam = (2*np.arcsin(var.SUN_DIAMETER/(2*d.km)))*(180/np.pi)
+        appDia = Angle(degrees=appDiam)
+        return alt, az, astrometric, appDia
 
     def hijri(self, t):
         t = t.utc
@@ -233,19 +242,23 @@ def result(lat, long, t0, t1):
     moon_alt = []
     moon_az = []
     moon_astrometric = []
+    moon_appDia = []
     sun_alt = []
     sun_az = []
     sun_astrometric = []
+    sun_appDia = []
     for t in sunset:
-        alt, az, astro = f.objPos(t, 'moon')
+        alt, az, astro, appDia = f.objPos(t, 'moon')
         moon_alt.append(alt)
         moon_az.append(az)
         moon_astrometric.append(astro)
+        moon_appDia.append(appDia.degrees)
         
-        alt, az, astro = f.objPos(t, 'sun')
+        alt, az, astro, appDia = f.objPos(t, 'sun')
         sun_alt.append(alt)
         sun_az.append(az)
         sun_astrometric.append(astro)
+        sun_appDia.append(appDia.degrees)
     
     elong = [moon.separation_from(sun) for moon, sun in zip(moon_astrometric, sun_astrometric)]
 
@@ -284,6 +297,11 @@ def result(lat, long, t0, t1):
     # moon_age[:] = [i.split('.', 1)[0] for i in moon_age]
     # lag[:] = [i.split('.', 1)[0] for i in lag]
 
+    moon_alt_deg = [i.degrees for i in moon_alt]
+    moon_az_deg = [i.degrees for i in moon_az]
+    sun_alt_deg = [i.degrees for i in sun_alt]
+    sun_az_deg = [i.degrees for i in sun_az]
+
     moon_alt[:] = [str(i).replace('deg', u'\N{DEGREE SIGN}') for i in moon_alt]
     moon_az[:] = [str(i).replace('deg', u'\N{DEGREE SIGN}') for i in moon_az]
     sun_alt[:] = [str(i).replace('deg', u'\N{DEGREE SIGN}') for i in sun_alt]
@@ -296,7 +314,10 @@ def result(lat, long, t0, t1):
                      sun_alt, sun_az, 
                      elong, moon_age,
                      moonset, lag,
-                     imkan_rukyat))
+                     imkan_rukyat,
+                     moon_alt_deg, moon_az_deg,
+                     sun_alt_deg, sun_az_deg,
+                     moon_appDia, sun_appDia))
 
 
     # tabel = list(zip(conj, sunset,
@@ -310,7 +331,10 @@ def result(lat, long, t0, t1):
                                       'Altitude Matahari', 'Azimuth Matahari', 
                                      'Elongasi', 'Usia Bulan',
                                      'Moonset', 'Lag Time',
-                                     'Imkan Rukyat'])
+                                     'Imkan Rukyat',
+                                     'moon_alt', 'moon_az',
+                                     'sun_alt', 'sun_az',
+                                     'moonAppDia', 'sunAppDia'])
 
     # df = pd.DataFrame(tabel, columns=['Waktu Konjungsi (UTC+07)', 'Waktu Sunset (UTC+07)', 
     #                                   'Altitude Bulan', 'Azimuth Bulan', 
