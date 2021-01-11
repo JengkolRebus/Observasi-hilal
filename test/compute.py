@@ -36,8 +36,11 @@ class Find():
         self.long = long
         self.t0 = t0
         self.t1 = t1
-        self.topo = Topos(self.lat, self.long, elevation_m=100.0)
+        # self.elev = elev
+        # self.topo = Topos(self.lat, self.long, elevation_m=self.elev)
+        self.topo = Topos(self.lat, self.long)
         self.loc = e['earth'] + self.topo
+        print(self.loc)
 
     def nearest_second(self, t):
         return (t + timedelta(seconds=0.5)).replace(microsecond=0)
