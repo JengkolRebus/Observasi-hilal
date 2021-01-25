@@ -9,6 +9,7 @@
 
 
 import sys
+import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Qt5Agg')
 
@@ -21,7 +22,6 @@ from datetime import datetime
 from skyfield.api import utc
 import pandas as pd
 
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 import numpy as np
