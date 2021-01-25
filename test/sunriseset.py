@@ -7,15 +7,17 @@ jkt = timezone('Asia/Jakarta')
 ts = load.timescale(builtin=True)
 e = load('de421.bsp')
 
-def nearest_second(t):
-    return (t + timedelta(seconds=0.5)).replace(microsecond=0)
+lat = 7+(49/60)+(59/3600)
+long = 110+(22/60)+(49/3600)
 
-t0 = ts.utc(2019, 1, 1)
-t1 = ts.utc(2020, 1, 1)
-f = almanac.moon_phases(e)
+lat = str(lat)+ ' S'
+long = str(long)+ ' E'
+
+topos = Topos(lat, long)
+
+t0 = ts.utc(2021, 1, 15, -7)
+t1 = ts.utc(2021, 1, 20, -7)
+f = almanac.sunrise_sunset(e, topos)
 t, y = almanac.find_discrete(t0, t1, f)
 for ti, yi in zip(t, y):
-    if (yi == 3):
-        t = ti.astimezone(jkt)
-        dt = nearest_second(t)
-        print(dt.replace(tzinfo=None))
+    print(ti.astimezone(jkt), yi)

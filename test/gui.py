@@ -25,6 +25,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 import numpy as np
+import time
 
 
 class Ui_MainWindow(object):
@@ -552,7 +553,10 @@ class Ui_MainWindow(object):
         self.statusbar.showMessage("Sedang menghitung...")
 
         # menghitung
+        start_time = time.time()
         compute.result(lat, long, t0, t1)
+        end_time = time.time()
+        print('Runtime:', round((end_time-start_time), 2))
         # compute.result(lat, long, t0, t1, elev=elev)
 
         # hapus tampilan status bar

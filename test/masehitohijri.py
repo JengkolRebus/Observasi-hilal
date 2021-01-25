@@ -25,8 +25,8 @@ hDay = [30, 29,
         30, 29]
 
 X = 2021 # tahun
-M = 1 # bulan
-D = 15 # tanggal
+M = 8 # bulan
+D = 9 # tanggal
 
 print(X, M, D)
 print()
@@ -128,31 +128,33 @@ if (DL < 19):
     H = H + 1
     # H = H + 1
 elif(DL > 18):
-    print('Leap Year')
+    print(H, 'is Leap Year')
     leap = True
     JJ = JJ - 355
     H = H + 1
+    if JJ == 0:
+        JJ = 355
+        m = 12
+        d = 30
 else:
     pass
 
-print('JJ=', JJ)
-print('H=', H)
+print(JJ)
 
-S = int((JJ-1)/29.5)
-print('S=', S)
+# print('JJ=', JJ)
+# print('H=', H)
 
-m = 1+S
-print('m=', m)
+# S = int((JJ-1)/29.5)
+# print('S=', S)
 
-d = int(JJ-(29.5*S))
-print('d=', d)
+# m = 1+S
+# print('m=', m)
 
-if (JJ == 355):
-    m = 12
-    d = 30
+# d = int(JJ-(29.5*S))
+# print('d=', d)
 
-print()
-print(H, m, d)
+# print()
+# print(H, m, d)
 
 # if (d < 1):
 #     if (m < 0):
@@ -170,4 +172,4 @@ print(H, m, d)
 
 # print(H, abs(m), d)
 
-print(H, hijr[m-1], d)
+# print(H, hijr[m-1], d)
