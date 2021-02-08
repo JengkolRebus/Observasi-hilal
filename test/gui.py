@@ -681,11 +681,11 @@ class Canvas(FigureCanvasQTAgg):
         ax.add_artist(moon)
         ax.add_artist(sun)
         if(x[0] > x[1]):
-            left = x[0] - 0.7
-            right = x[1] + 0.7
-        else:
             left = x[1] - 0.7
             right = x[0] + 0.7
+        else:
+            left = x[0] - 0.7
+            right = x[1] + 0.7
 
         bottom = y[1] - 1
         top = y[0] + 1
