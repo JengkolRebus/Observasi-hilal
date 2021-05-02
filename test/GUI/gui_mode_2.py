@@ -629,6 +629,123 @@ class Ui_MainWindow(object):
         print(long)
         print(t)
 
+        compute_mode2.result(lat, long, t0)
+
+        self.data = compute_mode2.var.df
+        data = self.data.iloc[0]
+        konjungsi = data[0]
+        sunset = data[1]
+        alt_bulan = data[2]
+        az_bulan = data[3]
+        alt_matahari = data[4]
+        az_matahari = data[5]
+        elongasi = data[6]
+        usia_bulan = data[7]
+        moonset = data[8]
+        lag_time = data[9]
+        wujudul_hilal = []
+        imkan_rukyat = data[10]
+
+        self.lineEdit_konjungsi.setText(str(konjungsi))
+        self.lineEdit_sunset.setText(str(sunset))
+        self.lineEdit_altBulan.setText(str(alt_bulan))
+        self.lineEdit_azBulan.setText(str(az_bulan))
+        self.lineEdit_altMatahari.setText(str(alt_matahari))
+        
+        self.lineEdit_azMatahari.setText(str(az_matahari))
+        self.lineEdit_elongasi.setText(str(elongasi))
+        self.lineEdit_usiaBulan.setText(str(usia_bulan))
+        self.lineEdit_moonset.setText(str(moonset))
+        self.lineEdit_lagTime.setText(str(lag_time))
+        
+        self.lineEdit_imkanRukyat.setText(str(imkan_rukyat))
+
+        canvas = Canvas(self.frame_grafik, moon_az=data[12], moon_alt=data[11], moon_appdia=data[15], sun_az=data[14], sun_alt=data[13], sun_appdia=data[16])
+
+class pandasModel(QAbstractTableModel):
+    def __init__(self, data):
+        QAbstractTableModel.__init__(self)
+        self._data = data
+
+    def rowCount(self, parent=None):
+        return self._data.shape[0]
+
+    def columnCount(self, parnet=None):
+        return self._data.shape[1]
+        # return 1
+
+    def data(self, index, role=Qt.DisplayRole):
+        if index.isValid():
+            if role == Qt.DisplayRole:
+                return str(self._data.iloc[index.row(), index.column()])
+        return None
+
+    def headerData(self, col, orientation, role):
+        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+            return self._data.columns[col]
+        return None
+
+class Canvas(FigureCanvasQTAgg):
+    def __init__(self, parent = None,
+                moon_az=0.1,
+                moon_alt=0.1,
+                moon_appdia=0.1, 
+                sun_az=0.2, 
+                sun_alt=0.1, 
+                sun_appdia=0.1, 
+                width = 5, 
+                height = 4, 
+                dpi = 100):
+        fig = Figure(figsize=(width, height), dpi = dpi)
+
+        self.moon_az = moon_az
+        self.moon_alt = moon_alt
+        self.moon_appDia = moon_appdia
+        self.sun_alt = sun_alt
+        self.sun_az = sun_az
+        self.sun_appDia = sun_appdia
+
+        FigureCanvasQTAgg.__init__(self, fig)
+        self.setParent(parent)
+        self.plot()
+        
+    def plot(self):
+        x = [self.moon_az, self.sun_az] # Azimuth
+        y = [self.moon_alt, self.sun_alt] # Altitude
+        r = [self.moon_appDia, self.sun_appDia] # Diameter Tampak
+
+        ax = self.figure.add_subplot()
+        ax.axis('equal')
+
+        ax.plot(x[0], y[0])
+        ax.plot(x[1], y[1])
+
+        moon = matplotlib.patches.Circle((x[0], y[0]), r[0], color='k', alpha=0.5)
+        sun = matplotlib.patches.Circle((x[1], y[1]), r[1], color='y')
+        
+        ax.add_artist(moon)
+        ax.add_artist(sun)
+        if(x[0] > x[1]):
+            left = x[1] - 0.7
+            right = x[0] + 0.7
+        else:
+            left = x[0] - 0.7
+            right = x[1] + 0.7
+
+        bottom = y[1] - 1
+        top = y[0] + 1
+
+        ax.plot([0, 360], [0, 0], 'k', label='Horizon')
+        ax.text(x[0], y[0], 'Bulan', color='black')
+        ax.text(x[1], y[1], 'Matahari')
+
+        ax.axis([left, right, bottom, top])
+        ax.set_xlabel('Azimuth')
+        ax.set_ylabel('Altitude')
+        ax.legend()
+
+        self.show()
+
 
 if __name__ == "__main__":
     import sys
