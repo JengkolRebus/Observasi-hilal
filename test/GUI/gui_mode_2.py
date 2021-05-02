@@ -17,7 +17,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QDate, QTime, QDateTime, QAbstractTableModel, Qt
 import random
-import compute
 from datetime import datetime
 from skyfield.api import utc
 import pandas as pd
@@ -359,6 +358,7 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.button_hitung.setFont(font)
         self.button_hitung.setObjectName("button_hitung")
+
         self.d_latutide = QtWidgets.QLineEdit(self.groupBox_2)
         self.d_latutide.setGeometry(QtCore.QRect(80, 20, 40, 25))
         font = QtGui.QFont()
@@ -367,12 +367,18 @@ class Ui_MainWindow(object):
         self.d_latutide.setAccessibleDescription("")
         self.d_latutide.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.d_latutide.setObjectName("d_latutide")
+        self.d_latutide.setText("7")
+
+        # Waktu t
+        t0 = QtCore.QDate.currentDate()
         self.dateEdit_dari = QtWidgets.QDateEdit(self.groupBox_2)
         self.dateEdit_dari.setGeometry(QtCore.QRect(80, 80, 130, 25))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.dateEdit_dari.setFont(font)
         self.dateEdit_dari.setObjectName("dateEdit_dari")
+        self.dateEdit_dari.setDate(t0)
+
         self.label_18 = QtWidgets.QLabel(self.groupBox_2)
         self.label_18.setGeometry(QtCore.QRect(120, 20, 10, 20))
         font = QtGui.QFont()
@@ -392,6 +398,8 @@ class Ui_MainWindow(object):
         self.m_latitude.setAccessibleDescription("")
         self.m_latitude.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.m_latitude.setObjectName("m_latitude")
+        self.m_latitude.setText("49")
+
         self.label_19 = QtWidgets.QLabel(self.groupBox_2)
         self.label_19.setGeometry(QtCore.QRect(160, 20, 10, 20))
         font = QtGui.QFont()
@@ -411,6 +419,8 @@ class Ui_MainWindow(object):
         self.s_latitude.setAccessibleDescription("")
         self.s_latitude.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.s_latitude.setObjectName("s_latitude")
+        self.s_latitude.setText("59")
+
         self.label_20 = QtWidgets.QLabel(self.groupBox_2)
         self.label_20.setGeometry(QtCore.QRect(200, 20, 10, 20))
         font = QtGui.QFont()
@@ -441,6 +451,8 @@ class Ui_MainWindow(object):
         self.s_longitude.setAccessibleDescription("")
         self.s_longitude.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.s_longitude.setObjectName("s_longitude")
+        self.s_longitude.setText('59')
+        
         self.label_22 = QtWidgets.QLabel(self.groupBox_2)
         self.label_22.setGeometry(QtCore.QRect(160, 50, 10, 20))
         font = QtGui.QFont()
@@ -471,6 +483,8 @@ class Ui_MainWindow(object):
         self.m_longitude.setAccessibleDescription("")
         self.m_longitude.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.m_longitude.setObjectName("m_longitude")
+        self.m_longitude.setText('22')
+
         self.d_longitude = QtWidgets.QLineEdit(self.groupBox_2)
         self.d_longitude.setGeometry(QtCore.QRect(80, 50, 40, 25))
         font = QtGui.QFont()
@@ -479,6 +493,8 @@ class Ui_MainWindow(object):
         self.d_longitude.setAccessibleDescription("")
         self.d_longitude.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.d_longitude.setObjectName("d_longitude")
+        self.d_longitude.setText('110')
+
         self.comboBox_latitude = QtWidgets.QComboBox(self.groupBox_2)
         self.comboBox_latitude.setEnabled(True)
         self.comboBox_latitude.setGeometry(QtCore.QRect(210, 20, 50, 25))
@@ -488,6 +504,9 @@ class Ui_MainWindow(object):
         self.comboBox_latitude.setEditable(True)
         self.comboBox_latitude.setCurrentText("")
         self.comboBox_latitude.setObjectName("comboBox_latitude")
+        self.comboBox_latitude.addItems(["N", "S"])
+        self.comboBox_latitude.setCurrentIndex(1)
+
         self.comboBox_longitude = QtWidgets.QComboBox(self.groupBox_2)
         self.comboBox_longitude.setGeometry(QtCore.QRect(210, 50, 50, 25))
         font = QtGui.QFont()
@@ -496,6 +515,9 @@ class Ui_MainWindow(object):
         self.comboBox_longitude.setEditable(True)
         self.comboBox_longitude.setCurrentText("")
         self.comboBox_longitude.setObjectName("comboBox_longitude")
+        self.comboBox_longitude.addItems(["W", "E"])
+        self.comboBox_longitude.setCurrentIndex(1)
+
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setGeometry(QtCore.QRect(9, 190, 910, 20))
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
