@@ -28,10 +28,10 @@ ts = load.timescale(builtin=True)
 e = load('de421.bsp')
 
 class Find():
-    def __init__(self, lat, long, t0):
+    def __init__(self, lat, long, t):
         self.lat = lat
         self.long = long
-        self.t0 = t0
+        self.t = t
         # self.elev = elev
         # self.topo = Topos(self.lat, self.long, elevation_m=self.elev)
         self.topo = Topos(self.lat, self.long)
@@ -53,10 +53,11 @@ class Find():
             else:
                 pass
         
-    def sunset(self, t, case):
+    def sunset(self, t):
+        t = ts.utc(t)
         t = t.utc
         t0 = ts.utc(t[0], t[1], t[2], t[3], t[4], t[5])
-        t1 = ts.utc(t[0], t[1], t[2] + case, t[3], t[4], t[5])
+        t1 = ts.utc(t[0], t[1], t[2] + 1, t[3], t[4], t[5])
         f = almanac.sunrise_sunset(e, self.topo)
         t, y = almanac.find_discrete(t0, t1, f)
         for ti, yi in zip(t, y):
@@ -86,36 +87,27 @@ def imkanRukyat(alt, elong, age):
 def result(lat, long, t0):
     f = Find(lat, long, t0)
 
-    sunset = f.sunset(t)
+    sunset = f.sunset(t0)
     # for i in sunset:
     #     print(i.astimezone(jkt))
     
-    moonset = f.moonSet(t)
+    moonset = f.moonSet(sunset)
     # for i in moonset:
     #     print(i.astimezone(jkt))
     
-    moon_alt = []
-    moon_az = []
-    moon_astrometric = []
-    moon_appDia = []
-    sun_alt = []
-    sun_az = []
-    sun_astrometric = []
-    sun_appDia = []
-    for t in sunset:
-        alt, az, astro, appDia = f.objPos(t, 'moon')
-        moon_alt = alt
-        moon_az = az
-        moon_astrometric = astro
-        moon_appDia = appDia.degrees
+    alt, az, astro, appDia = f.objPos(sunset, 'moon')
+    moon_alt = alt
+    moon_az = az
+    moon_astrometric = astro
+    moon_appDia = appDia.degrees
         
-        alt, az, astro, appDia = f.objPos(t, 'sun')
-        sun_alt = alt
-        sun_az = az
-        sun_astrometric = astro
-        sun_appDia = appDia.degrees
+    alt, az, astro, appDia = f.objPos(sunset, 'sun')
+    sun_alt = alt
+    sun_az = az
+    sun_astrometric = astro
+    sun_appDia = appDia.degrees
     
-    elong = [moon.separation_from(sun) for moon, sun in zip(moon_astrometric, sun_astrometric)]
+    elong = moon_astrometric.separation_from(sun_astrometric)
 
     def nearest_second(t):
         return (t + timedelta(seconds=0.5)).replace(microsecond=0)
@@ -124,55 +116,59 @@ def result(lat, long, t0):
         return timedelta(seconds=round(t.total_seconds()))
 
     
-    conj = 0
-    sunset[:] = [t.astimezone(jkt).replace(tzinfo=None) for t in sunset]
-    moonset[:] = [t.astimezone(jkt).replace(tzinfo=None) for t in moonset]
+    conj = 1
+    sunset = sunset.astimezone(jkt).replace(tzinfo=None)
+    moonset = moonset.astimezone(jkt).replace(tzinfo=None)
     
-    moon_age = 0
+    moon_age = 1
     lag = moonset - sunset
     
-    imkan_rukyat = 0
+    imkan_rukyat = 1
     
+    sunset = nearest_second(sunset)
+    moonset = nearest_second(moonset)
 
-    # lag[:] = [str(i) for i in lag]
-    
-    conj[:] = 0
-    sunset[:] = [nearest_second(t) for t in sunset]
-    moonset[:] = [nearest_second(t) for t in moonset]
+    lag = nearest_second_timedelta(lag)
 
-    
-    moon_age[:] = 0
-    lag[:] = [nearest_second_timedelta(t) for t in lag]
-
-    moon_age[:] = [str(i) for i in moon_age]
-    lag[:] = [str(i) for i in lag]
+    moon_age = str(moon_age)
+    lag = str(lag)
     
     # conj[:] = [str(i).split('.', 1)[0] for i in conj]
     # sunset[:] = [str(i).split('.', 1)[0] for i in sunset]
     # moon_age[:] = [i.split('.', 1)[0] for i in moon_age]
     # lag[:] = [i.split('.', 1)[0] for i in lag]
 
-    moon_alt_deg = [i.degrees for i in moon_alt]
-    moon_az_deg = [i.degrees for i in moon_az]
-    sun_alt_deg = [i.degrees for i in sun_alt]
-    sun_az_deg = [i.degrees for i in sun_az]
+    moon_alt_deg = moon_alt.degrees
+    moon_az_deg = moon_az.degrees
+    sun_alt_deg = sun_alt.degrees
+    sun_az_deg = sun_az.degrees
 
-    moon_alt[:] = [str(i).replace('deg', u'\N{DEGREE SIGN}') for i in moon_alt]
-    moon_az[:] = [str(i).replace('deg', u'\N{DEGREE SIGN}') for i in moon_az]
-    sun_alt[:] = [str(i).replace('deg', u'\N{DEGREE SIGN}') for i in sun_alt]
-    sun_az[:] = [str(i).replace('deg', u'\N{DEGREE SIGN}') for i in sun_az]
-    elong[:] = [str(i).replace('deg', u'\N{DEGREE SIGN}') for i in elong]
+    moon_alt = str(moon_alt).replace('deg', u'\N{DEGREE SIGN}')
+    moon_az = str(moon_az).replace('deg', u'\N{DEGREE SIGN}')
+    sun_alt = str(sun_alt).replace('deg', u'\N{DEGREE SIGN}')
+    sun_az = str(sun_az).replace('deg', u'\N{DEGREE SIGN}')
+    elong = str(elong).replace('deg', u'\N{DEGREE SIGN}')
     
     # Menampilkan hasil dalam bentuk tabel dataframe
-    tabel = list(zip(conj, sunset,
-                     moon_alt, moon_az, 
-                     sun_alt, sun_az, 
-                     elong, moon_age,
-                     moonset, lag,
-                     imkan_rukyat,
-                     moon_alt_deg, moon_az_deg,
-                     sun_alt_deg, sun_az_deg,
-                     moon_appDia, sun_appDia))
+    tabel = [conj, sunset, 
+                    moon_alt, moon_az, 
+                    sun_alt, sun_az, 
+                    elong, moon_age, 
+                    moonset, lag, 
+                    imkan_rukyat, moon_alt_deg, 
+                    moon_az_deg, sun_alt_deg, 
+                    sun_az_deg, moon_appDia, 
+                    sun_appDia]
+    
+    row = ['Waktu Konjungsi (UTC+07)', 'Waktu Sunset (UTC+07)', 
+                                      'Altitude Bulan', 'Azimuth Bulan', 
+                                      'Altitude Matahari', 'Azimuth Matahari', 
+                                     'Elongasi', 'Usia Bulan',
+                                     'Moonset', 'Lag Time',
+                                     'Imkan Rukyat',
+                                     'moon_alt', 'moon_az',
+                                     'sun_alt', 'sun_az',
+                                     'moonAppDia', 'sunAppDia']
 
 
     # tabel = list(zip(conj, sunset,
@@ -181,15 +177,7 @@ def result(lat, long, t0):
     #                  elong, moon_age,
     #                  imkan_rukyat))
     
-    df = pd.DataFrame(tabel, columns=['Waktu Konjungsi (UTC+07)', 'Waktu Sunset (UTC+07)', 
-                                      'Altitude Bulan', 'Azimuth Bulan', 
-                                      'Altitude Matahari', 'Azimuth Matahari', 
-                                     'Elongasi', 'Usia Bulan',
-                                     'Moonset', 'Lag Time',
-                                     'Imkan Rukyat',
-                                     'moon_alt', 'moon_az',
-                                     'sun_alt', 'sun_az',
-                                     'moonAppDia', 'sunAppDia'])
+    df = pd.DataFrame([tabel], columns=row)
 
     # df = pd.DataFrame(tabel, columns=['Waktu Konjungsi (UTC+07)', 'Waktu Sunset (UTC+07)', 
     #                                   'Altitude Bulan', 'Azimuth Bulan', 

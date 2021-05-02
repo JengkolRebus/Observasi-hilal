@@ -714,6 +714,8 @@ class Canvas(FigureCanvasQTAgg):
         y = [self.moon_alt, self.sun_alt] # Altitude
         r = [self.moon_appDia, self.sun_appDia] # Diameter Tampak
 
+        print(x[0])
+
         ax = self.figure.add_subplot()
         ax.axis('equal')
 
