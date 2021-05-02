@@ -28,7 +28,7 @@ ts = load.timescale(builtin=True)
 e = load('de421.bsp')
 
 class Find():
-    def __init__(self, lat, long, t0, t1):
+    def __init__(self, lat, long, t0):
         self.lat = lat
         self.long = long
         self.t0 = t0
@@ -41,35 +41,6 @@ class Find():
 
     def nearest_second(self, t):
         return (t + timedelta(seconds=0.5)).replace(microsecond=0)
-    
-    def conjunction(self):
-        result = []
-        t0 = ts.utc(self.t0)
-        t1 = ts.utc(self.t1)
-        f = almanac.oppositions_conjunctions(e, e['moon'])
-        t, y = almanac.find_discrete(t0, t1, f)
-        for ti, yi in zip(t, y):
-            if(yi == 1):
-                result.append(ti)
-            else:
-                pass
-
-        return result
-
-    def newMoon(self):
-        result = []
-        t0 = ts.utc(self.t0)
-        t1 = ts.utc(self.t1)
-        f = almanac.moon_phases(e)
-        t, y = almanac.find_discrete(t0, t1, f)
-        for ti, yi in zip(t, y):
-            if(yi == 0):
-                result.append(ti)
-            else:
-                pass
-
-        return result
-
 
     def moonSet(self, t):
         t = t.utc
@@ -82,13 +53,6 @@ class Find():
                 return ti
             else:
                 pass
-
-    def isMoonset(self, t):
-        stat = self.moonSet(t)
-        if (stat == None):
-            return False
-        else:
-            return True
         
     def sunset(self, t, case):
         t = t.utc
@@ -112,105 +76,6 @@ class Find():
         appDia = Angle(degrees=appDiam)
         return alt, az, astrometric, appDia
 
-    def hijri(self, t):
-        t = t.utc
-        year = t[0]
-        month = t[1]
-        day = t[2]
-
-        print('Input:', year, month, day)
-
-        # IF 1
-        if (month < 3):
-            year = year - 1 
-            month = month + 12
-        else:
-            pass
-
-        alpha = int(year/100)
-        betha = 2 - alpha + int(alpha/4)
-        b = int(365.25 * year) + int(30.6001 * (month + 1)) + day + 1722519 + betha
-        c = int((b - 122.1)/365.25)
-        d = int(365.25*c)
-        e = int((b - d) / 30.6001)
-
-        day = b - d - int(30.6001 * e)
-
-        # IF 2
-        if (e < 14):
-            month = e - 1
-        elif (e > 13):
-            month = e - 13
-        else:
-            pass
-
-        # IF 3
-        if (month > 2):
-            year = c - 4716
-        elif (month < 3):
-            year = c - 4715
-        else:
-            pass
-        print('Julian Date:', year, month, day)
-
-
-        # IF 4
-        if ((year % 4) == 0):
-            W = 1
-        else:
-            W = 2
-
-        N = int((275*month)/9) - (W * int((month + 9)/12)) + day - 30
-        A = year - 623
-        B = int(A/4)
-        C = A % 4
-        C1 = 365.2501 * C
-        C2 = int(C1)
-
-        # IF 5
-        if ((C1 - C2) > 0.5):
-            C2 = C2 + 1
-        else:
-            pass
-
-        D = (1461*B) + 170 + C2
-        Q = int(D/10631)
-        R = D % 10631
-        J = int(R/354)
-        K = R % 354
-        O = int(((11*J) + 14)/30)
-        H = (30 * Q) + J + 1
-        JJ = K - O + N - 1
-
-        CL = H % 30
-        DL = ((11 * CL) + 3) % 30
-
-        # IF 6
-        if (DL < 19):
-            JJ = JJ - 354
-            H = H + 1
-        elif (DL > 18):
-            JJ = JJ - 355
-            H = H + 1
-        elif (JJ == 0):
-            JJ = 355
-            H = H - 1
-        else:
-            pass
-
-        S = int((JJ - 1)/29.5)
-        m = 1 + S
-        d = int(JJ - (29.5 * S))
-
-        if (d < 0):
-            d = 30 + d
-            m = 11 + m
-            H = H - 1
-            # print(tahun, bulan, hari)
-        else:
-            pass
-        return '{}-{}-{}'.format(H, m, d)
-
 
 # Metode untuk membandingkan dengan Imkan Rukyat
 def imkanRukyat(alt, elong, age):
@@ -219,23 +84,14 @@ def imkanRukyat(alt, elong, age):
     else:
         return u'\u2718'
 
-def result(lat, long, t0, t1):
-    f = Find(lat, long, t0, t1)
-    conj = f.newMoon()
-    # conj = f.conjunction()
-    # hijr = [f.hijri(i) for i in conj]
+def result(lat, long, t0):
+    f = Find(lat, long, t0)
 
-    sunset = [f.sunset(t, 1) for t in conj]
-    for index, i in enumerate(sunset):
-        if(f.isMoonset(i) == False):
-            i = f.sunset(i, 2)
-            sunset[index] = i
-        else:
-            pass
+    sunset = f.sunset(t)
     # for i in sunset:
     #     print(i.astimezone(jkt))
     
-    moonset = [f.moonSet(t) for t in sunset]
+    moonset = f.moonSet(t)
     # for i in moonset:
     #     print(i.astimezone(jkt))
     
@@ -249,16 +105,16 @@ def result(lat, long, t0, t1):
     sun_appDia = []
     for t in sunset:
         alt, az, astro, appDia = f.objPos(t, 'moon')
-        moon_alt.append(alt)
-        moon_az.append(az)
-        moon_astrometric.append(astro)
-        moon_appDia.append(appDia.degrees)
+        moon_alt = alt
+        moon_az = az
+        moon_astrometric = astro
+        moon_appDia = appDia.degrees
         
         alt, az, astro, appDia = f.objPos(t, 'sun')
-        sun_alt.append(alt)
-        sun_az.append(az)
-        sun_astrometric.append(astro)
-        sun_appDia.append(appDia.degrees)
+        sun_alt = alt
+        sun_az = az
+        sun_astrometric = astro
+        sun_appDia = appDia.degrees
     
     elong = [moon.separation_from(sun) for moon, sun in zip(moon_astrometric, sun_astrometric)]
 
@@ -269,24 +125,24 @@ def result(lat, long, t0, t1):
         return timedelta(seconds=round(t.total_seconds()))
 
     
-    conj[:] = [t.astimezone(jkt).replace(tzinfo=None) for t in conj]
+    conj = 0
     sunset[:] = [t.astimezone(jkt).replace(tzinfo=None) for t in sunset]
     moonset[:] = [t.astimezone(jkt).replace(tzinfo=None) for t in moonset]
     
-    moon_age = [t1-t0 for (t0, t1) in zip(conj, sunset)]
-    lag = [j-i for (i, j) in zip(sunset, moonset)]
+    moon_age = 0
+    lag = moonset - sunset
     
-    imkan_rukyat = [imkanRukyat(al, el, age) for al, el, age in zip(moon_alt, elong, moon_age)]
+    imkan_rukyat = 0
     
 
     # lag[:] = [str(i) for i in lag]
     
-    conj[:] = [nearest_second(t) for t in conj]
+    conj[:] = 0
     sunset[:] = [nearest_second(t) for t in sunset]
     moonset[:] = [nearest_second(t) for t in moonset]
 
     
-    moon_age[:] = [nearest_second_timedelta(t) for t in moon_age]
+    moon_age[:] = 0
     lag[:] = [nearest_second_timedelta(t) for t in lag]
 
     moon_age[:] = [str(i) for i in moon_age]
