@@ -629,7 +629,7 @@ class Ui_MainWindow(object):
         print(long)
         print(t)
 
-        compute_mode2.result(lat, long, t0)
+        compute_mode2.result(lat, long, t)
 
         self.data = compute_mode2.var.df
         data = self.data.iloc[0]
