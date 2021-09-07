@@ -38,7 +38,7 @@ class toHijri():
         A3 = A%100
         print(A1, A2, A3)
         
-        if (A%400) == 0 or ((A%4)==0 and (A%100)>0):
+        if ((A%400) == 0 or ((A%4)==0 and (A%100)>0)):
             F = 2 - D + E
         else:
             F = 0
@@ -92,4 +92,4 @@ class toHijri():
         else:
             print(hari - 325, bulan[11], K)
 
-toHijri(2018, 8, 8)
+toHijri(2021, 8, 10)
