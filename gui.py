@@ -675,8 +675,8 @@ class Ui_MainWindow(object):
 
     def hitung(self):
         self.listWidget.clear()
-        lat = int(self.d_latutide.text()) + (int(self.m_latitude.text())/60) + (int(self.s_latitude.text())/3600)
-        long = int(self.d_longitude.text()) + (int(self.m_longitude.text())/60) + (int(self.s_longitude.text())/3600)
+        lat = int(self.d_latutide.text()) + (int(self.m_latitude.text())/60) + (float(self.s_latitude.text())/3600)
+        long = int(self.d_longitude.text()) + (int(self.m_longitude.text())/60) + (float(self.s_longitude.text())/3600)
 
         lat = str(lat) + ' ' + self.comboBox_latitude.currentText()
         long = str(long) + ' ' + self.comboBox_longitude.currentText()
