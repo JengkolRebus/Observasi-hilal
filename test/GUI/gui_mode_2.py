@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'test_listview.ui'
+# Form implementation generated from reading ui file 'gui_mode_2.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.1
 #
@@ -17,7 +17,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QDate, QTime, QDateTime, QAbstractTableModel, Qt
 import random
-import compute
 from datetime import datetime
 from skyfield.api import utc
 import pandas as pd
@@ -26,6 +25,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 import numpy as np
 import time
+import compute_mode2
 
 
 class Ui_MainWindow(object):
@@ -318,7 +318,7 @@ class Ui_MainWindow(object):
         self.lineEdit_imkanRukyat.setReadOnly(True)
         self.lineEdit_imkanRukyat.setObjectName("lineEdit_imkanRukyat")
         self.groupBox_2 = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox_2.setGeometry(QtCore.QRect(10, 0, 270, 190))
+        self.groupBox_2.setGeometry(QtCore.QRect(10, 0, 271, 190))
         self.groupBox_2.setObjectName("groupBox_2")
         self.label_14 = QtWidgets.QLabel(self.groupBox_2)
         self.label_14.setGeometry(QtCore.QRect(10, 20, 80, 25))
@@ -353,17 +353,6 @@ class Ui_MainWindow(object):
         self.label_16.setAcceptDrops(False)
         self.label_16.setWordWrap(False)
         self.label_16.setObjectName("label_16")
-        self.label_17 = QtWidgets.QLabel(self.groupBox_2)
-        self.label_17.setGeometry(QtCore.QRect(10, 110, 80, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.label_17.setFont(font)
-        self.label_17.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
-        self.label_17.setMouseTracking(False)
-        self.label_17.setTabletTracking(False)
-        self.label_17.setAcceptDrops(False)
-        self.label_17.setWordWrap(False)
-        self.label_17.setObjectName("label_17")
         self.button_hitung = QtWidgets.QPushButton(self.groupBox_2)
         self.button_hitung.setGeometry(QtCore.QRect(130, 150, 75, 25))
         font = QtGui.QFont()
@@ -459,7 +448,7 @@ class Ui_MainWindow(object):
         self.d_longitude.setAccessibleDescription("")
         self.d_longitude.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.d_longitude.setObjectName("d_longitude")
-        self.d_longitude.setText('110')
+        self.d_longitude.setText("110")
 
         self.label_21 = QtWidgets.QLabel(self.groupBox_2)
         self.label_21.setGeometry(QtCore.QRect(120, 50, 10, 20))
@@ -503,7 +492,7 @@ class Ui_MainWindow(object):
         self.s_longitude.setAccessibleDescription("")
         self.s_longitude.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.s_longitude.setObjectName("s_longitude")
-        self.s_longitude.setText('59')
+        self.s_longitude.setText("59")
 
         self.label_23 = QtWidgets.QLabel(self.groupBox_2)
         self.label_23.setGeometry(QtCore.QRect(200, 50, 10, 20))
@@ -528,7 +517,7 @@ class Ui_MainWindow(object):
         self.comboBox_longitude.addItems(["W", "E"])
         self.comboBox_longitude.setCurrentIndex(1)
 
-        # Waktu t0
+        # Waktu t
         t0 = QtCore.QDate.currentDate()
         self.dateEdit_dari = QtWidgets.QDateEdit(self.groupBox_2)
         self.dateEdit_dari.setGeometry(QtCore.QRect(80, 80, 130, 25))
@@ -538,59 +527,12 @@ class Ui_MainWindow(object):
         self.dateEdit_dari.setObjectName("dateEdit_dari")
         self.dateEdit_dari.setDate(t0)
 
-        # Waktu t1
-        t1 = t0.addMonths(1)
-        self.dateEdit_sampai = QtWidgets.QDateEdit(self.groupBox_2)
-        self.dateEdit_sampai.setGeometry(QtCore.QRect(80, 110, 130, 25))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.dateEdit_sampai.setFont(font)
-        self.dateEdit_sampai.setObjectName("dateEdit_sampai")
-        self.dateEdit_sampai.setDate(t1)
+        self.line = QtWidgets.QFrame(self.centralwidget)
+        self.line.setGeometry(QtCore.QRect(9, 190, 910, 20))
+        self.line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setObjectName("line")
 
-        # self.label_18 = QtWidgets.QLabel(self.centralwidget)
-        # self.label_18.setGeometry(QtCore.QRect(250, 50, 51, 25))
-        # font = QtGui.QFont()
-        # font.setPointSize(10)
-        # self.label_18.setFont(font)
-        # self.label_18.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
-        # self.label_18.setMouseTracking(False)
-        # self.label_18.setTabletTracking(False)
-        # self.label_18.setAcceptDrops(False)
-        # self.label_18.setWordWrap(False)
-        # self.label_18.setObjectName("label_18")
-        # self.groupBox_3 = QtWidgets.QGroupBox(self.centralwidget)
-        # self.groupBox_3.setGeometry(QtCore.QRect(240, 0, 160, 190))
-        # self.groupBox_3.setObjectName("groupBox_3")
-        # self.lineEdit_elevasi = QtWidgets.QLineEdit(self.groupBox_3)
-        # self.lineEdit_elevasi.setGeometry(QtCore.QRect(60, 50, 61, 25))
-        # font = QtGui.QFont()
-        # font.setPointSize(10)
-        # self.lineEdit_elevasi.setFont(font)
-        # self.lineEdit_elevasi.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        # self.lineEdit_elevasi.setObjectName("lineEdit_elevasi")
-        # self.checkBox_elevasi = QtWidgets.QCheckBox(self.groupBox_3)
-        # self.checkBox_elevasi.setGeometry(QtCore.QRect(10, 20, 141, 25))
-        # self.checkBox_elevasi.setObjectName("checkBox_elevasi")
-        # self.label_19 = QtWidgets.QLabel(self.groupBox_3)
-        # self.label_19.setGeometry(QtCore.QRect(125, 50, 15, 25))
-        # font = QtGui.QFont()
-        # font.setPointSize(10)
-        # self.label_19.setFont(font)
-        # self.label_19.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
-        # self.label_19.setMouseTracking(False)
-        # self.label_19.setTabletTracking(False)
-        # self.label_19.setAcceptDrops(False)
-        # self.label_19.setWordWrap(False)
-        # self.label_19.setObjectName("label_19")
-        # self.groupBox_4 = QtWidgets.QGroupBox(self.centralwidget)
-        # self.groupBox_4.setGeometry(QtCore.QRect(410, 0, 510, 190))
-        # self.groupBox_4.setObjectName("groupBox_4")
-        # self.line = QtWidgets.QFrame(self.centralwidget)
-        # self.line.setGeometry(QtCore.QRect(9, 190, 910, 20))
-        # self.line.setFrameShape(QtWidgets.QFrame.HLine)
-        # self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
-        # self.line.setObjectName("line")
         self.credit = QtWidgets.QLabel(self.centralwidget)
         self.credit.setGeometry(QtCore.QRect(839, 620, 80, 20))
         font = QtGui.QFont()
@@ -603,20 +545,19 @@ class Ui_MainWindow(object):
         self.credit.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.credit.setWordWrap(False)
         self.credit.setObjectName("credit")
+
         self.button_simpan = QtWidgets.QPushButton(self.centralwidget)
         self.button_simpan.setGeometry(QtCore.QRect(80, 620, 75, 25))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.button_simpan.setFont(font)
         self.button_simpan.setObjectName("button_simpan")
-        # self.groupBox_3.raise_()
+
         self.groupBox.raise_()
         self.listWidget.raise_()
         self.label.raise_()
         self.groupBox_2.raise_()
-        # self.label_18.raise_()
-        # self.groupBox_4.raise_()
-        # self.line.raise_()
+        self.line.raise_()
         self.credit.raise_()
         self.button_simpan.raise_()
         MainWindow.setCentralWidget(self.centralwidget)
@@ -634,12 +575,9 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        
-        self.listWidget.itemClicked.connect(self.selectedList)
-        self.button_hitung.clicked.connect(self.hitung)
-        self.button_simpan.clicked.connect(self.save_file)
 
-        # self.checkBox_elevasi.isChecked
+        
+        self.button_hitung.clicked.connect(self.hitung)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -661,15 +599,20 @@ class Ui_MainWindow(object):
         self.groupBox_2.setTitle(_translate("MainWindow", "Setting"))
         self.label_14.setText(_translate("MainWindow", "Latitude"))
         self.label_15.setText(_translate("MainWindow", "Longitude"))
-        self.label_16.setText(_translate("MainWindow", "Dari"))
-        self.label_17.setText(_translate("MainWindow", "Sampai"))
+        self.label_16.setText(_translate("MainWindow", "Tanggal"))
         self.button_hitung.setText(_translate("MainWindow", "Hitung"))
-        # self.label_18.setText(_translate("MainWindow", "Elevasi"))
-        # self.groupBox_3.setTitle(_translate("MainWindow", "ELevasi"))
-        # self.lineEdit_elevasi.setText(_translate("MainWindow", "0"))
-        # self.checkBox_elevasi.setText(_translate("MainWindow", "Gunakan Elevasi"))
-        # self.label_19.setText(_translate("MainWindow", "m"))
-        # self.groupBox_4.setTitle(_translate("MainWindow", "Keterangan"))
+        self.d_latutide.setWhatsThis(_translate("MainWindow", "<html><head/><body><p>Ini Latitude</p></body></html>"))
+        self.label_18.setText(_translate("MainWindow", "°"))
+        self.m_latitude.setWhatsThis(_translate("MainWindow", "<html><head/><body><p>Ini Latitude</p></body></html>"))
+        self.label_19.setText(_translate("MainWindow", "\'"))
+        self.s_latitude.setWhatsThis(_translate("MainWindow", "<html><head/><body><p>Ini Latitude</p></body></html>"))
+        self.label_20.setText(_translate("MainWindow", "\""))
+        self.label_21.setText(_translate("MainWindow", "°"))
+        self.s_longitude.setWhatsThis(_translate("MainWindow", "<html><head/><body><p>Ini Latitude</p></body></html>"))
+        self.label_22.setText(_translate("MainWindow", "\'"))
+        self.label_23.setText(_translate("MainWindow", "\""))
+        self.m_longitude.setWhatsThis(_translate("MainWindow", "<html><head/><body><p>Ini Latitude</p></body></html>"))
+        self.d_longitude.setWhatsThis(_translate("MainWindow", "<html><head/><body><p>Ini Latitude</p></body></html>"))
         self.credit.setText(_translate("MainWindow", "@_jengkolrebus"))
         self.button_simpan.setText(_translate("MainWindow", "Simpan"))
 
@@ -681,53 +624,15 @@ class Ui_MainWindow(object):
         lat = str(lat) + ' ' + self.comboBox_latitude.currentText()
         long = str(long) + ' ' + self.comboBox_longitude.currentText()
 
-        t0 = self.dateEdit_dari.date().toPyDate()
-        t1 = self.dateEdit_sampai.date().toPyDate()
-        
-        # if (self.checkBox_elevasi.isChecked()):
-        #     elev = int(self.lineEdit_elevasi.text())
-        # else:
-        #     elev = 0
+        t = self.dateEdit_dari.date().toPyDate()
+        print(lat)
+        print(long)
+        print(t)
 
-        # tampilkan sedang menghitung
-        self.statusbar.showMessage("Sedang menghitung...")
+        compute_mode2.result(lat, long, t)
 
-        # menghitung
-        start_time = time.time()
-        compute.result(lat, long, t0, t1)
-        end_time = time.time()
-        print('Runtime:', round((end_time-start_time), 2))
-        # compute.result(lat, long, t0, t1, elev=elev)
-
-        # hapus tampilan status bar
-        # self.statusbar.clearMessage()
-
-        self.data = compute.var.df
-        sunset = self.data['Waktu Sunset (UTC+07)'].tolist()
-        sunset = [str(i) for i in sunset]
-        self.listWidget.addItems(sunset)
-        
-        self.statusbar.clearMessage()
-
-    # def save_file():
-    #     filetype = (("Excel Document", "*.xlsx"),)
-    #     f = filedialog.asksaveasfilename(defaultextension='.xlsx', filetypes=filetype)
-    #     compute.var.df.to_excel(f)
-    #     print("File Saved")
-
-    def save_file(self):
-        option = QFileDialog.Options()
-        # option |= QFileDialog.DontUseNativeDialog
-        filename, _ = QFileDialog.getSaveFileName(None,"Save File", "", "Excel Document (*.xlsx)", options=option)
-        if filename:
-            compute.var.df.to_excel(filename)
-            print(filename)
-            print('Save')
-
-    def selectedList(self, item):
-        row = self.listWidget.currentRow()
-        # print(row)
-        data = self.data.iloc[row]
+        self.data = compute_mode2.var.df
+        data = self.data.iloc[0]
         konjungsi = data[0]
         sunset = data[1]
         alt_bulan = data[2]
@@ -809,6 +714,8 @@ class Canvas(FigureCanvasQTAgg):
         y = [self.moon_alt, self.sun_alt] # Altitude
         r = [self.moon_appDia, self.sun_appDia] # Diameter Tampak
 
+        print(x[0])
+
         ax = self.figure.add_subplot()
         ax.axis('equal')
 
@@ -840,6 +747,7 @@ class Canvas(FigureCanvasQTAgg):
         ax.legend()
 
         self.show()
+
 
 if __name__ == "__main__":
     import sys
