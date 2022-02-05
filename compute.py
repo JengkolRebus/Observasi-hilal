@@ -78,7 +78,7 @@ class Find():
         t = t.utc
         t0 = ts.utc(t[0], t[1], t[2], t[3], t[4], t[5])
         t1 = ts.utc(t[0], t[1], t[2]+1, t[3], t[4], t[5])
-        f = almanac.risings_and_settings(e, e['moon'], self.topo)
+        f = almanac.risings_and_settings(e, e['moon'], self.topo, horizon_degrees=-0.833333)
         t, y = almanac.find_discrete(t0, t1, f)
         for ti, yi in zip(t, y):
             if(yi == 0):
