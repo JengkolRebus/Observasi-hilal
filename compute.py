@@ -217,7 +217,14 @@ class Find():
 
 # Metode untuk membandingkan dengan Imkan Rukyat
 def imkanRukyat(alt, elong, age):
-    if(alt.degrees >= 2 and elong.degrees >= 3 and (timedelta.total_seconds(age)/3600) > 8):
+    if(alt.degrees >= 3 and elong.degrees >= 6.4):
+        return u'\u2714'
+    else:
+        return u'\u2718'
+
+# Metode untuk membandingkan dengan Wujudul Hilal
+def wujudulHilal(alt):
+    if(alt.degrees >= 0):
         return u'\u2714'
     else:
         return u'\u2718'
@@ -279,6 +286,7 @@ def result(lat, long, t0, t1):
     moon_age = [t1-t0 for (t0, t1) in zip(conj, sunset)]
     lag = [j-i for (i, j) in zip(sunset, moonset)]
     
+    wujudul_hilal = [wujudulHilal(al) for al in moon_alt]
     imkan_rukyat = [imkanRukyat(al, el, age) for al, el, age in zip(moon_alt, elong, moon_age)]
     
 
@@ -317,7 +325,7 @@ def result(lat, long, t0, t1):
                      sun_alt, sun_az, 
                      elong, moon_age,
                      moonset, lag,
-                     imkan_rukyat,
+                     wujudul_hilal, imkan_rukyat,
                      moon_alt_deg, moon_az_deg,
                      sun_alt_deg, sun_az_deg,
                      moon_appDia, sun_appDia))
@@ -334,7 +342,7 @@ def result(lat, long, t0, t1):
                                       'Altitude Matahari', 'Azimuth Matahari', 
                                      'Elongasi', 'Usia Bulan',
                                      'Moonset', 'Lag Time',
-                                     'Imkan Rukyat',
+                                     'Wujudul Hilal', 'Imkan Rukyat',
                                      'moon_alt', 'moon_az',
                                      'sun_alt', 'sun_az',
                                      'moonAppDia', 'sunAppDia'])

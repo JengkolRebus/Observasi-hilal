@@ -738,8 +738,8 @@ class Ui_MainWindow(object):
         usia_bulan = data[7]
         moonset = data[8]
         lag_time = data[9]
-        wujudul_hilal = []
-        imkan_rukyat = data[10]
+        wujudul_hilal = data[10]
+        imkan_rukyat = data[11]
 
         self.lineEdit_konjungsi.setText(str(konjungsi))
         self.lineEdit_sunset.setText(str(sunset))
@@ -753,9 +753,10 @@ class Ui_MainWindow(object):
         self.lineEdit_moonset.setText(str(moonset))
         self.lineEdit_lagTime.setText(str(lag_time))
         
+        self.lineEdit_wujudulHilal.setText(str(wujudul_hilal))
         self.lineEdit_imkanRukyat.setText(str(imkan_rukyat))
 
-        canvas = Canvas(self.frame_grafik, moon_az=data[12], moon_alt=data[11], moon_appdia=data[15], sun_az=data[14], sun_alt=data[13], sun_appdia=data[16])
+        canvas = Canvas(self.frame_grafik, moon_az=data[13], moon_alt=data[12], moon_appdia=data[16], sun_az=data[15], sun_alt=data[14], sun_appdia=data[17])
 
 class pandasModel(QAbstractTableModel):
     def __init__(self, data):
