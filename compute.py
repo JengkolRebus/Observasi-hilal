@@ -17,11 +17,11 @@ import numpy as np
 
 
 class var:
-    df = pd.DataFrame(list(zip(' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ')), columns=['Waktu Konjungsi (UTC+07)', 'Waktu Hilal (UTC+07)', 
+    df = pd.DataFrame(list(zip(' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ')), columns=['Waktu Konjungsi (UTC+07)', 'Waktu Hilal (UTC+07)', 
                                       'Altitude Bulan', 'Azimuth Bulan', 
                                       'Altitude Matahari', 'Azimuth Matahari', 
                                      'Elongasi', 'Usia Bulan', 
-                                     'Imkan Rukyat'])
+                                     'Wujudul Hilal', 'Imkan Rukyat'])
 
     MOON_DIAMETER = 3474.2 #1737.1 # km
     SUN_DIAMETER = 1392700 #696340 # km
@@ -215,7 +215,7 @@ class Find():
         return '{}-{}-{}'.format(H, m, d)
 
 
-# Metode untuk membandingkan dengan Imkan Rukyat
+# Metode untuk membandingkan dengan Imkan Rukyat MABIMS yang baru, atau kriteria 3-6.4
 def imkanRukyat(alt, elong, age):
     if(alt.degrees >= 3 and elong.degrees >= 6.4):
         return u'\u2714'

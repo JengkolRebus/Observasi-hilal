@@ -720,7 +720,7 @@ class Ui_MainWindow(object):
         # option |= QFileDialog.DontUseNativeDialog
         filename, _ = QFileDialog.getSaveFileName(None,"Save File", "", "Excel Document (*.xlsx)", options=option)
         if filename:
-            compute.var.df.to_excel(filename)
+            compute.var.df.drop(columns=['moon_alt', 'moon_az', 'sun_alt', 'sun_az', 'moonAppDia', 'sunAppDia']).to_excel(filename)
             print(filename)
             print('Save')
 
