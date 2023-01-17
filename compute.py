@@ -216,7 +216,7 @@ class Find():
 
 
 # Metode untuk membandingkan dengan Imkan Rukyat MABIMS yang baru, atau kriteria 3-6.4
-def imkanRukyat(alt, elong, age):
+def imkanRukyat(alt, elong):
     if(alt.degrees >= 3 and elong.degrees >= 6.4):
         return u'\u2714'
     else:
@@ -287,7 +287,7 @@ def result(lat, long, t0, t1):
     lag = [j-i for (i, j) in zip(sunset, moonset)]
     
     wujudul_hilal = [wujudulHilal(al) for al in moon_alt]
-    imkan_rukyat = [imkanRukyat(al, el, age) for al, el, age in zip(moon_alt, elong, moon_age)]
+    imkan_rukyat = [imkanRukyat(al, el) for al, el in zip(moon_alt, elong)]
     
 
     # lag[:] = [str(i) for i in lag]
