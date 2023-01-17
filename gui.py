@@ -789,10 +789,10 @@ class Canvas(FigureCanvasQTAgg):
                 sun_az=0.2, 
                 sun_alt=0.1, 
                 sun_appdia=0.1, 
-                width = 5, 
+                width = 4.8, 
                 height = 4, 
                 dpi = 100):
-        fig = Figure(figsize=(width, height), dpi = dpi)
+        fig = Figure(figsize=(width, height), dpi = dpi, tight_layout=True)
 
         self.moon_az = moon_az
         self.moon_alt = moon_alt
