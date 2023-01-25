@@ -27,7 +27,7 @@ class var:
     SUN_DIAMETER = 1392700 #696340 # km
 
 jkt = timezone('Asia/Jakarta')
-ts = load.timescale(builtin=True)
+ts = load.timescale(builtin=True) #builtin=True
 e = load('de421.bsp')
 
 class Find():
@@ -296,7 +296,6 @@ def result(lat, long, t0, t1):
     conj[:] = [nearest_second(t) for t in conj]
     sunset[:] = [nearest_second(t) for t in sunset]
     moonset[:] = [nearest_second(t) for t in moonset]
-
     
     moon_age[:] = [nearest_second_timedelta(t) for t in moon_age]
     lag[:] = [nearest_second_timedelta(t) for t in lag]
